@@ -10,7 +10,7 @@
 - [성능 개선](#성능-개선)
 - [트러블 슈팅](#트러블-슈팅)
 
-📦 ##프로젝트 소개
+## 📦 프로젝트 소개
 
 Limited-Edition-Commerce-Platform은
 특정 시간에 오픈되는 한정판 상품을 선착순으로 구매하는 커머스 서비스입니다.
@@ -26,7 +26,7 @@ Limited-Edition-Commerce-Platform은
 
 개발 인원: 1인
 
-🛠 ##기술 스택
+## 🛠 기술 스택
 Backend
 ● Java 17
 ● Spring Boot 3.x
