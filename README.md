@@ -29,7 +29,7 @@ Limited-Edition-Commerce-Platform은
 ## 🛠 기술 스택
 Backend
 ● Java 17
-● Spring Boot 3.x
+● Spring Boot 3.2.1
 ● Spring Web
 ● Spring Data JPA
 ● QueryDSL
@@ -40,14 +40,9 @@ MSA / Infrastructure
 ● Netflix Eureka
 
 Database & Cache
-● MySQL (또는 PostgreSQL)
+● MySQL
 ● Redis
 
 Messaging
-● Kafka / RabbitMQ
+● Kafka
 
-DevOps
-● Docker
-● Docker Compose
-● GitHub Actions
-● AWS (EC2, RDS, S3)
