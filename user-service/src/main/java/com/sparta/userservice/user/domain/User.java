@@ -25,7 +25,10 @@ public class User {
     private String password;
 
     @Column(length = 50)
-    private String nickname;
+    private String name;
+
+    @Column(nullable = false)
+    private UserRole role;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -40,21 +43,21 @@ public class User {
     @Column
     private LocalDateTime deletedAt;
 
-    public static User create(String email, String encodedPassword, String nickname) {
+    public static User create(String email, String encodedPassword, String name) {
         return User.builder()
                 .userId(UUID.randomUUID())
                 .email(email)
                 .password(encodedPassword)
-                .nickname(nickname)
+                .name(name)
                 .status(UserStatus.ACTIVE)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
 
-    public void updateProfile(String nickname, String encodedPassword) {
-        if (nickname != null) {
-            this.nickname = nickname;
+    public void updateProfile(String name, String encodedPassword) {
+        if (name != null) {
+            this.name = name;
         }
         if (encodedPassword != null) {
             this.password = encodedPassword;
