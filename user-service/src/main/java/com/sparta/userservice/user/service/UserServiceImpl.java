@@ -2,14 +2,18 @@ package com.sparta.userservice.user.service;
 
 import com.sparta.userservice.user.domain.User;
 import com.sparta.userservice.user.domain.UserRole;
+import com.sparta.userservice.user.domain.UserStatus;
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
+import com.sparta.userservice.user.dto.response.UserInfoResponse;
 import com.sparta.userservice.user.dto.response.UserLoginResponse;
 import com.sparta.userservice.user.dto.response.UserSignupResponse;
 import com.sparta.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,11 +56,36 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserInfoResponse getMyInfo(UUID userId) {
+        User user = getActiveUser(userId);
+
+
+        return UserInfoResponse.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .role(user.getRole().name())
+                .createdAt(user.getCreatedAt())
+                .build();
+    }
+
 
     //공통 메서드
     private void validateSignup(UserSignupRequest request) {
         if(userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 사용중인 이메일");
         }
+    }
+
+    private User  getActiveUser(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        if(user.getStatus()== UserStatus.WITHDRAWN) {
+            throw new IllegalArgumentException("탈퇴한 회원");
+        }
+        return user;
     }
 }
