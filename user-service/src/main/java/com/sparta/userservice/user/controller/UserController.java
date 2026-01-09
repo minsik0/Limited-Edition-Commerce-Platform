@@ -1,12 +1,10 @@
 package com.sparta.userservice.user.controller;
 
+import com.sparta.userservice.user.dto.request.UserDeleteRequest;
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
 import com.sparta.userservice.user.dto.request.UserUpdateRequest;
-import com.sparta.userservice.user.dto.response.UserInfoResponse;
-import com.sparta.userservice.user.dto.response.UserLoginResponse;
-import com.sparta.userservice.user.dto.response.UserSignupResponse;
-import com.sparta.userservice.user.dto.response.UserUpdateResponse;
+import com.sparta.userservice.user.dto.response.*;
 import com.sparta.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("signup")
     public ResponseEntity<UserSignupResponse> signup(@RequestBody UserSignupRequest request){
         UserSignupResponse response = userService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -44,6 +42,13 @@ public class UserController {
     public ResponseEntity<UserUpdateResponse> updateMyInfo( @RequestHeader("X-User-Id") UUID userId,
                                                             @RequestBody UserUpdateRequest request) {
         UserUpdateResponse response = userService.updateMyInfo(userId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<UserDeleteResponse> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId,
+                                                           @RequestBody UserDeleteRequest request) {
+        UserDeleteResponse response = userService.deleteMyInfo(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

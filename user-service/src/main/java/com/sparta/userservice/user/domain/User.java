@@ -64,4 +64,13 @@ public class User {
         }
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void delete() {
+        this.status = UserStatus.DELETED;
+        this.deletedAt = LocalDateTime.now();
+
+        //마스킹
+        this.email = "deleted_" + userId;
+        this.name = "탈퇴회원";
+    }
 }

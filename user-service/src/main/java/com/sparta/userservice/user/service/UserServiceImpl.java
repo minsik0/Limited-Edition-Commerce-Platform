@@ -3,13 +3,11 @@ package com.sparta.userservice.user.service;
 import com.sparta.userservice.user.domain.User;
 import com.sparta.userservice.user.domain.UserRole;
 import com.sparta.userservice.user.domain.UserStatus;
+import com.sparta.userservice.user.dto.request.UserDeleteRequest;
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
 import com.sparta.userservice.user.dto.request.UserUpdateRequest;
-import com.sparta.userservice.user.dto.response.UserInfoResponse;
-import com.sparta.userservice.user.dto.response.UserLoginResponse;
-import com.sparta.userservice.user.dto.response.UserSignupResponse;
-import com.sparta.userservice.user.dto.response.UserUpdateResponse;
+import com.sparta.userservice.user.dto.response.*;
 import com.sparta.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -85,6 +83,17 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public UserDeleteResponse deleteMyInfo(UUID userId, UserDeleteRequest request) {
+        User user = getActiveUser(userId);
+        user.delete();
+
+        return  UserDeleteResponse.builder()
+                .userId(user.getUserId())
+                .status(user.getStatus().name())
+                .deletedAt(user.getDeletedAt())
+                .build();
+    }
 
     //공통 메서드
     private void validateSignup(UserSignupRequest request) {
@@ -97,7 +106,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
-        if(user.getStatus()== UserStatus.WITHDRAWN) {
+        if(user.getStatus()== UserStatus.DELETED) {
             throw new IllegalArgumentException("탈퇴한 회원");
         }
         return user;
