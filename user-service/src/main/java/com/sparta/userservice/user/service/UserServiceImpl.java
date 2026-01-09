@@ -5,9 +5,11 @@ import com.sparta.userservice.user.domain.UserRole;
 import com.sparta.userservice.user.domain.UserStatus;
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
+import com.sparta.userservice.user.dto.request.UserUpdateRequest;
 import com.sparta.userservice.user.dto.response.UserInfoResponse;
 import com.sparta.userservice.user.dto.response.UserLoginResponse;
 import com.sparta.userservice.user.dto.response.UserSignupResponse;
+import com.sparta.userservice.user.dto.response.UserUpdateResponse;
 import com.sparta.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,6 +70,18 @@ public class UserServiceImpl implements UserService {
                 .name(user.getName())
                 .role(user.getRole().name())
                 .createdAt(user.getCreatedAt())
+                .build();
+    }
+
+    @Override
+    public UserUpdateResponse updateMyInfo(UUID userId,UserUpdateRequest request) {
+        User user =  getActiveUser(userId);
+        user.update(request.getName(), request.getPassword());
+
+        return UserUpdateResponse.builder()
+                .userId(user.getUserId())
+                .name(user.getName())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 

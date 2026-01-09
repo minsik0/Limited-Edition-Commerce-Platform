@@ -2,9 +2,11 @@ package com.sparta.userservice.user.controller;
 
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
+import com.sparta.userservice.user.dto.request.UserUpdateRequest;
 import com.sparta.userservice.user.dto.response.UserInfoResponse;
 import com.sparta.userservice.user.dto.response.UserLoginResponse;
 import com.sparta.userservice.user.dto.response.UserSignupResponse;
+import com.sparta.userservice.user.dto.response.UserUpdateResponse;
 import com.sparta.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<UserInfoResponse> getMyInfo(@RequestHeader("X-User-Id") UUID userId) {
         UserInfoResponse response = userService.getMyInfo(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<UserUpdateResponse> updateMyInfo( @RequestHeader("X-User-Id") Long userId,
+                                                            @RequestBody UserUpdateRequest request) {
+        UserUpdateResponse response = userService.updateMyInfo(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

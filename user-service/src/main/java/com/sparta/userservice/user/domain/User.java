@@ -55,7 +55,7 @@ public class User {
                 .build();
     }
 
-    public void updateProfile(String name, String encodedPassword) {
+    public void update(String name, String encodedPassword) {
         if (name != null) {
             this.name = name;
         }
