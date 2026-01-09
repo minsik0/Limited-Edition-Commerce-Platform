@@ -41,9 +41,9 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserUpdateResponse> updateMyInfo( @RequestHeader("X-User-Id") Long userId,
+    public ResponseEntity<UserUpdateResponse> updateMyInfo( @RequestHeader("X-User-Id") UUID userId,
                                                             @RequestBody UserUpdateRequest request) {
-        UserUpdateResponse response = userService.updateMyInfo(request);
+        UserUpdateResponse response = userService.updateMyInfo(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
