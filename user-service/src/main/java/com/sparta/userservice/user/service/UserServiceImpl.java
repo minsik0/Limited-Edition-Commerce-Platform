@@ -2,7 +2,9 @@ package com.sparta.userservice.user.service;
 
 import com.sparta.userservice.user.domain.User;
 import com.sparta.userservice.user.domain.UserRole;
+import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
+import com.sparta.userservice.user.dto.response.UserLoginResponse;
 import com.sparta.userservice.user.dto.response.UserSignupResponse;
 import com.sparta.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,19 @@ public class UserServiceImpl implements UserService {
                 .name(savedUser.getName())
                 .role(savedUser.getRole().name())
                 .build();
+    }
+
+    @Override
+    public UserLoginResponse login(UserLoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
+
+        return UserLoginResponse.builder()
+                .accessToken("Mock-token")
+                .userId(user.getUserId())
+                .role(user.getRole().name())
+                .build();
+
     }
 
 
