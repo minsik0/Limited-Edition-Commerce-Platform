@@ -7,6 +7,9 @@ import com.sparta.userservice.user.dto.request.UserUpdateRequest;
 import com.sparta.userservice.user.dto.response.*;
 import com.sparta.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,11 @@ public class UserController {
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         UserLoginResponse response = userService.login(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<UserListResponse>> getUsers(@PageableDefault(size = 30) Pageable pageable) {
+        return ResponseEntity.ok(userService.getUsers(pageable));
     }
 
     @GetMapping("/me")

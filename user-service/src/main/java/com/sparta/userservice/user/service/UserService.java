@@ -5,7 +5,9 @@ import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
 import com.sparta.userservice.user.dto.request.UserUpdateRequest;
 import com.sparta.userservice.user.dto.response.*;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 import java.util.UUID;
 
@@ -21,4 +23,6 @@ public interface UserService {
     UserUpdateResponse updateMyInfo(UUID userId, UserUpdateRequest request);
 
     UserDeleteResponse deleteMyInfo(UUID userId, UserDeleteRequest request);
+
+    Page<UserListResponse> getUsers(Pageable pageable);
 }

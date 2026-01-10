@@ -10,6 +10,8 @@ import com.sparta.userservice.user.dto.request.UserUpdateRequest;
 import com.sparta.userservice.user.dto.response.*;
 import com.sparta.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +60,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<UserListResponse> getUsers(Pageable pageable) {
+        return userRepository.findAllByStatus(UserStatus.ACTIVE, pageable)
+                .map(user -> UserListResponse.builder()
+                        .userId(user.getUserId())
+                        .email(user.getEmail())
+                        .name(user.getName())
+                        .role(user.getRole().name())
+                        .build()
+                );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public UserInfoResponse getMyInfo(UUID userId) {
         User user = getActiveUser(userId);
 
@@ -72,7 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserUpdateResponse updateMyInfo(UUID userId,UserUpdateRequest request) {
+    public UserUpdateResponse updateMyInfo(UUID userId, UserUpdateRequest request) {
         User user =  getActiveUser(userId);
         user.update(request.getName(), request.getPassword());
 
