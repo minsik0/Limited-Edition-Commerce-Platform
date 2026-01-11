@@ -1,5 +1,6 @@
 package com.sparta.userservice.user.service;
 
+import com.sparta.userservice.auth.jwt.JwtProvider;
 import com.sparta.userservice.user.domain.User;
 import com.sparta.userservice.user.domain.UserRole;
 import com.sparta.userservice.user.domain.UserStatus;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
     @Override
     public UserSignupResponse signup(UserSignupRequest request) {
@@ -50,8 +52,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
 
+        String token = jwtProvider.generateToken(
+                user.getUserId(),
+                user.getRole().name()
+        );
+
         return UserLoginResponse.builder()
-                .accessToken("Mock-token")
+                .accessToken(token)
                 .userId(user.getUserId())
                 .role(user.getRole().name())
                 .build();

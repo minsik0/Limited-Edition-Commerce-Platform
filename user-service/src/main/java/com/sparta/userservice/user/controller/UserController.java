@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -41,9 +42,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserInfoResponse> getMyInfo(@RequestHeader("X-User-Id") UUID userId) {
-        UserInfoResponse response = userService.getMyInfo(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    public ResponseEntity<UserInfoResponse> getMyInfo(Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        return ResponseEntity.ok(userService.getMyInfo(userId));
     }
 
     @PatchMapping("/me")
