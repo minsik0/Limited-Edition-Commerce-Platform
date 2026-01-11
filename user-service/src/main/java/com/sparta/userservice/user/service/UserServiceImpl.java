@@ -1,6 +1,8 @@
 package com.sparta.userservice.user.service;
 
 import com.sparta.userservice.auth.jwt.JwtProvider;
+import com.sparta.userservice.common.exception.BusinessException;
+import com.sparta.userservice.common.exception.ErrorCode;
 import com.sparta.userservice.user.domain.User;
 import com.sparta.userservice.user.domain.UserRole;
 import com.sparta.userservice.user.domain.UserStatus;
@@ -30,7 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserSignupResponse signup(UserSignupRequest request) {
-        validateSignup(request);
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
 
         User user = User.builder()
                 .email(request.getEmail())
@@ -52,10 +56,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserLoginResponse login(UserLoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
 
         String token = jwtProvider.generateToken(
@@ -87,7 +91,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserInfoResponse getMyInfo(UUID userId) {
-        User user = getActiveUser(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
 
         return UserInfoResponse.builder()
@@ -101,7 +106,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserUpdateResponse updateMyInfo(UUID userId, UserUpdateRequest request) {
-        User user =  getActiveUser(userId);
+        User user =  userRepository.findById(userId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
         user.update(request.getName(), request.getPassword());
 
         return UserUpdateResponse.builder()
@@ -113,7 +120,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDeleteResponse deleteMyInfo(UUID userId, UserDeleteRequest request) {
-        User user = getActiveUser(userId);
+        User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
         user.delete();
 
         return  UserDeleteResponse.builder()
@@ -123,20 +132,4 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    //공통 메서드
-    private void validateSignup(UserSignupRequest request) {
-        if(userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용중인 이메일");
-        }
-    }
-
-    private User  getActiveUser(UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-
-        if(user.getStatus()== UserStatus.DELETED) {
-            throw new IllegalArgumentException("탈퇴한 회원");
-        }
-        return user;
-    }
 }

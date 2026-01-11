@@ -1,5 +1,6 @@
 package com.sparta.userservice.user.controller;
 
+import com.sparta.userservice.common.response.ApiResponse;
 import com.sparta.userservice.user.dto.request.UserDeleteRequest;
 import com.sparta.userservice.user.dto.request.UserLoginRequest;
 import com.sparta.userservice.user.dto.request.UserSignupRequest;
@@ -25,15 +26,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("signup")
-    public ResponseEntity<UserSignupResponse> signup(@RequestBody UserSignupRequest request){
+    public ResponseEntity<ApiResponse<UserSignupResponse>> signup(@RequestBody UserSignupRequest request){
         UserSignupResponse response = userService.signup(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request){
+    public ResponseEntity<ApiResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request){
         UserLoginResponse response = userService.login(request);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
     @GetMapping
@@ -48,16 +49,16 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserUpdateResponse> updateMyInfo( @RequestHeader("X-User-Id") UUID userId,
-                                                            @RequestBody UserUpdateRequest request) {
+    public ResponseEntity<ApiResponse<UserUpdateResponse>> updateMyInfo(@RequestHeader("X-User-Id") UUID userId,
+                                                                        @RequestBody UserUpdateRequest request) {
         UserUpdateResponse response = userService.updateMyInfo(userId, request);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<UserDeleteResponse> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId,
-                                                           @RequestBody UserDeleteRequest request) {
+    public ResponseEntity<ApiResponse<UserDeleteResponse>> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId,
+                                                                        @RequestBody UserDeleteRequest request) {
         UserDeleteResponse response = userService.deleteMyInfo(userId, request);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 }
