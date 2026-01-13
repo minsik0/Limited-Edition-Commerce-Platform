@@ -25,6 +25,9 @@ repositories {
 }
 
 dependencies {
+	//env
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
 	// Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
