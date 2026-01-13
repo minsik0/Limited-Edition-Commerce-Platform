@@ -56,9 +56,9 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<ApiResponse<UserDeleteResponse>> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId,
-                                                                        @RequestBody UserDeleteRequest request) {
-        UserDeleteResponse response = userService.deleteMyInfo(userId, request);
+    public ResponseEntity<ApiResponse<UserDeleteResponse>> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId
+                                                                        ) {
+        UserDeleteResponse response = userService.deleteMyInfo(userId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 }

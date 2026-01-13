@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserSignupResponse signup(UserSignupRequest request) {
@@ -36,12 +36,12 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
 
-        User user = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .name(request.getName())
-                .role(UserRole.USER)
-                .build();
+        User user = User.create(
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getName(),
+                UserRole.USER
+        );
 
         User savedUser = userRepository.save(user);
 
@@ -109,7 +109,10 @@ public class UserServiceImpl implements UserService {
         User user =  userRepository.findById(userId)
                         .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        user.update(request.getName(), request.getPassword());
+        String encodedPassword = (request.getPassword() != null&& !request.getPassword().isBlank())
+                ? passwordEncoder.encode(request.getPassword())
+                : null;
+        user.update(request.getName(), encodedPassword);
 
         return UserUpdateResponse.builder()
                 .userId(user.getUserId())
@@ -119,7 +122,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDeleteResponse deleteMyInfo(UUID userId, UserDeleteRequest request) {
+    public UserDeleteResponse deleteMyInfo(UUID userId) {
         User user = userRepository.findById(userId)
                         .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 

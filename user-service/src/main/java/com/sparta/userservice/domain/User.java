@@ -27,6 +27,7 @@ public class User {
     @Column(length = 50)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
 
@@ -43,12 +44,13 @@ public class User {
     @Column
     private LocalDateTime deletedAt;
 
-    public static User create(String email, String encodedPassword, String name) {
+    public static User create(String email, String encodedPassword, String name, UserRole user) {
         return User.builder()
                 .userId(UUID.randomUUID())
                 .email(email)
                 .password(encodedPassword)
                 .name(name)
+                .role(user)
                 .status(UserStatus.ACTIVE)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -70,7 +72,7 @@ public class User {
         this.deletedAt = LocalDateTime.now();
 
         //마스킹
-        this.email = "deleted_" + userId;
+        this.email = userId.toString() + "@deleted.user";
         this.name = "탈퇴회원";
     }
 }

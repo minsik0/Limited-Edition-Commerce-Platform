@@ -1,6 +1,5 @@
 package com.sparta.userservice.application.service;
 
-import com.sparta.userservice.application.dto.request.UserDeleteRequest;
 import com.sparta.userservice.application.dto.request.UserLoginRequest;
 import com.sparta.userservice.application.dto.request.UserSignupRequest;
 import com.sparta.userservice.application.dto.request.UserUpdateRequest;
@@ -22,7 +21,7 @@ public interface UserService {
 
     UserUpdateResponse updateMyInfo(UUID userId, UserUpdateRequest request);
 
-    UserDeleteResponse deleteMyInfo(UUID userId, UserDeleteRequest request);
+    UserDeleteResponse deleteMyInfo(UUID userId);
 
     Page<UserListResponse> getUsers(Pageable pageable);
 }
