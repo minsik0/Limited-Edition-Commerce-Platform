@@ -45,20 +45,20 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(productQueryService.get(productId)));
     }
 
-    @PutMapping("/{productId}")
+    @PatchMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductStatusResponse>> update(@PathVariable UUID productId,
                                                                      @RequestBody ProductUpdateRequest request) {
 
         return ResponseEntity.ok(ApiResponse.success(productCommandService.update(productId, request)));
     }
 
-    @PostMapping("/{productId}/open")
+    @PatchMapping("/{productId}/open")
     public ResponseEntity<ApiResponse<ProductStatusResponse>> open(@Valid @PathVariable UUID productId) {
 
         return ResponseEntity.ok(ApiResponse.success(productCommandService.open(productId)));
     }
 
-    @PostMapping("/{productId}/close")
+    @PatchMapping("/{productId}/close")
     public ResponseEntity<ApiResponse<ProductStatusResponse>> close(@Valid @PathVariable UUID productId) {
 
         return ResponseEntity.ok(ApiResponse.success(productCommandService.close(productId)));
