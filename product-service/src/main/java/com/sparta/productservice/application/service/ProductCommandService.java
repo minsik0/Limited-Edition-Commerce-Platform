@@ -2,6 +2,7 @@ package com.sparta.productservice.application.service;
 
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
+import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -11,11 +12,11 @@ public interface ProductCommandService {
 
     UUID create(ProductCreateRequest request);
 
-    void update(UUID productId, ProductUpdateRequest request);
+    ProductStatusResponse update(UUID productId, ProductUpdateRequest request);
 
-    void open(UUID productId);
+    ProductStatusResponse open(UUID productId);
 
-    void close(UUID productId);
+    ProductStatusResponse close(UUID productId);
 
 
 }

@@ -3,6 +3,7 @@ package com.sparta.productservice.api.controller;
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
 import com.sparta.productservice.application.dto.response.ProductResponse;
+import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.application.dto.response.ProductSummaryResponse;
 import com.sparta.productservice.application.service.ProductCommandService;
 import com.sparta.productservice.application.service.ProductQueryService;
@@ -45,22 +46,22 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ApiResponse<ProductResponse>> update(@PathVariable UUID productId,
-                                                               @RequestBody ProductUpdateRequest request) {
-        productCommandService.update(productId, request);
-        return ResponseEntity.ok(ApiResponse.success(null));
+    public ResponseEntity<ApiResponse<ProductStatusResponse>> update(@PathVariable UUID productId,
+                                                                     @RequestBody ProductUpdateRequest request) {
+
+        return ResponseEntity.ok(ApiResponse.success(productCommandService.update(productId, request)));
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> open(@Valid @PathVariable UUID productId) {
-        productCommandService.open(productId);
-        return ResponseEntity.ok(ApiResponse.success(null));
+    @PostMapping("/{productId}/open")
+    public ResponseEntity<ApiResponse<ProductStatusResponse>> open(@Valid @PathVariable UUID productId) {
+
+        return ResponseEntity.ok(ApiResponse.success(productCommandService.open(productId)));
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> close(@Valid @PathVariable UUID productId) {
-        productCommandService.close(productId);
-        return ResponseEntity.ok(ApiResponse.success(null));
+    @PostMapping("/{productId}/close")
+    public ResponseEntity<ApiResponse<ProductStatusResponse>> close(@Valid @PathVariable UUID productId) {
+
+        return ResponseEntity.ok(ApiResponse.success(productCommandService.close(productId)));
     }
 
 

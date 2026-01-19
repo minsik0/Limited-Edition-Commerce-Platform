@@ -3,6 +3,7 @@ package com.sparta.productservice.application.service;
 
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
+import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.domain.product.ProductStatus;
 import com.sparta.productservice.global.exception.BusinessException;
@@ -36,7 +37,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     @Override
-    public void update(UUID productId, ProductUpdateRequest request) {
+    public ProductStatusResponse update(UUID productId, ProductUpdateRequest request) {
         Product product = findProduct(productId);
 
         product.updateInfo(
@@ -45,10 +46,12 @@ public class ProductCommandServiceImpl implements ProductCommandService {
                 request.getMaxPurchasePerUser(),
                 request.getOpenAt()
         );
+
+        return new ProductStatusResponse(productId, product.getStatus());
     }
 
     @Override
-    public void open(UUID productId) {
+    public ProductStatusResponse open(UUID productId) {
         Product product = findProduct(productId);
 
         if(product.isBeforeOpenAt()) {
@@ -60,12 +63,14 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         }
 
         product.open();
+        return new ProductStatusResponse(productId, product.getStatus());
     }
 
     @Override
-    public void close(UUID productId) {
+    public ProductStatusResponse close(UUID productId) {
         Product product = findProduct(productId);
         product.close();
+        return new ProductStatusResponse(productId, product.getStatus());
     }
 
     //메서드
