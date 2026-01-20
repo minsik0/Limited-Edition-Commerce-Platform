@@ -25,7 +25,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public Page<ProductSummaryResponse> getPage(Pageable pageable) {
-        return productRepository.findAll(pageable)
+        return productRepository.findByDeletedAtIsNull(pageable)
                 .map(ProductSummaryResponse::from);
     }
 

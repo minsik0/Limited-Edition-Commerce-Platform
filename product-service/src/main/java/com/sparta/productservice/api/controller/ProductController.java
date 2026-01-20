@@ -47,13 +47,13 @@ public class ProductController {
 
     @PatchMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductStatusResponse>> update(@PathVariable UUID productId,
-                                                                     @RequestBody ProductUpdateRequest request) {
+                                                                     @Valid @RequestBody ProductUpdateRequest request) {
 
         return ResponseEntity.ok(ApiResponse.success(productCommandService.update(productId, request)));
     }
 
     @PatchMapping("/{productId}/open")
-    public ResponseEntity<ApiResponse<ProductStatusResponse>> open(@Valid @PathVariable UUID productId) {
+    public ResponseEntity<ApiResponse<ProductStatusResponse>> open(@PathVariable UUID productId) {
 
         return ResponseEntity.ok(ApiResponse.success(productCommandService.open(productId)));
     }

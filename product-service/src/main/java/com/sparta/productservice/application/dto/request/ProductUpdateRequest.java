@@ -18,10 +18,10 @@ public class ProductUpdateRequest {
     private String name;
 
     @Positive(message = "가격은 0보다 커야 합니다.")
-    private int price;
+    private Integer price;
 
     @Positive(message = "1인당 구매 제한 수량은 1 이상이어야 합니다.")
-    private int maxPurchasePerUser;
+    private Integer maxPurchasePerUser;
 
     @NotNull(message = "오픈 시간은 필수입니다.")
     private LocalDateTime openAt;

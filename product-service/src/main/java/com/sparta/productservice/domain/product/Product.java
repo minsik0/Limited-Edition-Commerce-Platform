@@ -75,6 +75,7 @@ public class Product {
     public void close() {
         this.status = ProductStatus.CLOSED;
         this.deletedAt = LocalDateTime.now();
+        this.options.forEach(ProductOption::delete);
     }
 
     public void soldOut() {

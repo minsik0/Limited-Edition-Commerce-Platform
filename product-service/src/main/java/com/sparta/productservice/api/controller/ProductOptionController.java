@@ -38,14 +38,14 @@ public class ProductOptionController {
     }
 
     @PatchMapping("/{optionId}")
-    public ResponseEntity<ApiResponse<ProductStatusResponse>> update(@PathVariable UUID optionId,
-                                                                     @Valid @RequestBody ProductOptionUpdateRequest request) {
+    public ResponseEntity<ApiResponse<Void>> update(@PathVariable UUID optionId,
+                                                    @Valid @RequestBody ProductOptionUpdateRequest request) {
         productOptionService.update(optionId, request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @DeleteMapping("/{optionId}")
-    public ResponseEntity<ApiResponse<ProductStatusResponse>> delete(@PathVariable UUID optionId) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID optionId) {
 
         productOptionService.delete(optionId);
         return ResponseEntity.ok(ApiResponse.success(null));
