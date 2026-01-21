@@ -18,6 +18,7 @@ public class CreateOrderRequest {
     @NotNull
     private UUID optionId;
 
+    @NotNull
     @Min(1)
     private Integer quantity;
 }

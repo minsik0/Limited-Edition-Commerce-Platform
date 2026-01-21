@@ -35,12 +35,6 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         String optionName = "임시 옵션명";
         int price = 100_000;
 
-        Order order = Order.builder()
-                .userId(userId)
-                .status(OrderStatus.CREATED)
-                .totalPrice(0)
-                .build();
-
         OrderItem item = OrderItem.builder()
                 .productId(request.getProductId())
                 .productName(productName)
@@ -50,19 +44,17 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .quantity(request.getQuantity())
                 .build();
 
-        order.addItem(item);
-
         int totalPrice = item.calculateTotalPrice();
 
-        Order completedOrder = Order.builder()
-                .userId(order.getUserId())
-                .status(order.getStatus())
+        Order order = Order.builder()
+                .userId(userId)
+                .status(OrderStatus.CREATED)
                 .totalPrice(totalPrice)
                 .build();
 
-        completedOrder.addItem(item);
+        order.addItem(item);
 
-        Order savedOrder = orderRepository.save(completedOrder);
+        Order savedOrder = orderRepository.save(order);
 
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }
