@@ -1,0 +1,54 @@
+package com.sparta.orderservice.domain.order;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "orders")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Order {
+
+    @Id
+    @GeneratedValue
+    private UUID orderId;
+
+    @Column(nullable = false)
+    private UUID userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status;
+
+    @Column(nullable = false)
+    private int totalPrice;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Builder
+    private Order(UUID userId, OrderStatus status, int totalPrice) {
+        this.userId = userId;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addItem(OrderItem item) {
+        this.items.add(item);
+        item.assignOrder(this);
+    }
+}
