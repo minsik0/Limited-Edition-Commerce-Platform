@@ -1,6 +1,5 @@
 package com.sparta.orderservice.application.dto.response;
 
-import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -13,7 +13,7 @@ public class OrderItemResponse {
 
     private UUID productId;
     private String productName;
-    private UUID orderId;
+    private UUID optionId;
     private String optionName;
     private Integer price;
     private Integer quantity;

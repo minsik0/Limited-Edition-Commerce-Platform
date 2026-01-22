@@ -8,7 +8,6 @@ import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.OrderStatus;
 import com.sparta.orderservice.global.exception.BusinessException;
 import com.sparta.orderservice.global.exception.ErrorCode;
-import com.sparta.orderservice.global.response.ApiResponse;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,7 +57,10 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
     }
 
-    //메서드
+    /*
+    * @param item 변환할 OrderItem 엔티티
+    * @return 변환된 OrderItemResponse DTO
+    * */
     private OrderItemResponse toItemResponse(OrderItem item) {
         return new OrderItemResponse(
                 item.getProductId(),
