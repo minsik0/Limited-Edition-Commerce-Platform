@@ -25,10 +25,10 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
-    @PatchMapping("/{orderId}/cancle")
+    @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<ApiResponse<Void>> cancelOrder(@RequestHeader("X-User-Id") UUID userId,
                                                          @PathVariable UUID orderId) {
         orderCommandService.cancelOrder(userId, orderId);
-        return ResponseEntity.ok(ApiResponse.success());
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

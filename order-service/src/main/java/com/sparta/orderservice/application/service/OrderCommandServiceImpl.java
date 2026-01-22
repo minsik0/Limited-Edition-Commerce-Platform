@@ -66,10 +66,6 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
-        if(!order.getStatus().isCancelable()) {
-            throw new BusinessException(ErrorCode.ORDER_CANNOT_CANCEL);
-        }
-
         order.cancel();
     }
 }
