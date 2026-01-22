@@ -1,5 +1,7 @@
 package com.sparta.orderservice.domain.order;
 
+import com.sparta.orderservice.global.exception.BusinessException;
+import com.sparta.orderservice.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,5 +52,13 @@ public class Order {
     public void addItem(OrderItem item) {
         this.items.add(item);
         item.assignOrder(this);
+    }
+
+    public void cancel() {
+        if (!status.isCancelable()) {
+            throw new BusinessException(ErrorCode.ORDER_CANNOT_CANCEL);
+        }
+        this.status = OrderStatus.CANCELED;
+        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -9,4 +9,6 @@ import java.util.UUID;
 @Service
 public interface OrderCommandService {
     CreateOrderResponse create(UUID userId, CreateOrderRequest request);
+
+    void cancelOrder(UUID userId, UUID orderId);
 }
