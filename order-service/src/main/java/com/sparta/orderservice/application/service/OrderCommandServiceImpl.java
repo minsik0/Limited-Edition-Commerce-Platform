@@ -5,6 +5,8 @@ import com.sparta.orderservice.application.dto.response.CreateOrderResponse;
 import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
 import com.sparta.orderservice.domain.order.OrderStatus;
+import com.sparta.orderservice.global.exception.BusinessException;
+import com.sparta.orderservice.global.exception.ErrorCode;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,13 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Order savedOrder = orderRepository.save(order);
 
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
+    }
+
+    @Override
+    public void cancelOrder(UUID userId, UUID orderId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
+
+        order.cancel();
     }
 }
