@@ -41,7 +41,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
     @Override
     public OrderResponse getOrder(UUID userId, UUID orderId) {
-        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+        Order order = orderRepository.findByOrderIdAndUserId(orderId, userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
         return  new OrderResponse(
