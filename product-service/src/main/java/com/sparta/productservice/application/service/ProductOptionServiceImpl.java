@@ -56,7 +56,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductOptionResponse> getByProductId(UUID productId) {
-        return productOptionRepository.findByProductIdAndDeletedAtIsNull(productId)
+        return productOptionRepository.findByProductProductIdAndDeletedAtIsNull(productId)
                 .stream()
                 .map(ProductOptionResponse::from)
                 .toList();

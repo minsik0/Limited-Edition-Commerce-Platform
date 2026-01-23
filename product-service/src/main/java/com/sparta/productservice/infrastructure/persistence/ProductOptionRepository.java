@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductOptionRepository extends JpaRepository<ProductOption, UUID> {
-    List<ProductOption> findByProductIdAndDeletedAtIsNull(UUID productId);
+    List<ProductOption> findByProductProductIdAndDeletedAtIsNull(UUID productId);
 
     @Query("""
         SELECT COALESCE(SUM(o.remainStock), 0)
