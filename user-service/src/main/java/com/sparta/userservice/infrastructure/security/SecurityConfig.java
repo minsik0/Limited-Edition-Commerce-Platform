@@ -25,7 +25,7 @@ public class SecurityConfig {
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("user/signup", "/user/login").permitAll()
+                        .requestMatchers("/users/signup", "/users/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

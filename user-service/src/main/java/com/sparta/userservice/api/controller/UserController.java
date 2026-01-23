@@ -49,16 +49,17 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<UserUpdateResponse>> updateMyInfo(@RequestHeader("X-User-Id") UUID userId,
+    public ResponseEntity<ApiResponse<UserUpdateResponse>> updateMyInfo(Authentication authentication,
                                                                         @RequestBody UserUpdateRequest request) {
+        UUID userId = (UUID) authentication.getPrincipal();
         UserUpdateResponse response = userService.updateMyInfo(userId, request);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<ApiResponse<UserDeleteResponse>> deleteMyInfo(@RequestHeader("X-User-Id") UUID userId
-                                                                        ) {
+    public ResponseEntity<ApiResponse<UserDeleteResponse>> deleteMyInfo(Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
         UserDeleteResponse response = userService.deleteMyInfo(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
