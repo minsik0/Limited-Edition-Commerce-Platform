@@ -41,16 +41,17 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     @Builder
-    private Order(UUID userId, OrderStatus status, int totalPrice) {
+    private Order(UUID userId) {
         this.userId = userId;
-        this.status = status;
-        this.totalPrice = totalPrice;
+        this.status = OrderStatus.CREATED;
+        this.totalPrice = 0;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     public void addItem(OrderItem item) {
         this.items.add(item);
+        this.totalPrice += item.calculateTotalPrice();
         item.assignOrder(this);
     }
 
