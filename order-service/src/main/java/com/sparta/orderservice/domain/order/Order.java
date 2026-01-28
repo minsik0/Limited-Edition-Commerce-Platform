@@ -43,7 +43,7 @@ public class Order {
     @Builder
     private Order(UUID userId, OrderStatus status, int totalPrice) {
         this.userId = userId;
-        this.status = status;
+        this.status = OrderStatus.CREATED;
         this.totalPrice = totalPrice;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -51,6 +51,7 @@ public class Order {
 
     public void addItem(OrderItem item) {
         this.items.add(item);
+        this.totalPrice += item.calculateTotalPrice();
         item.assignOrder(this);
     }
 
