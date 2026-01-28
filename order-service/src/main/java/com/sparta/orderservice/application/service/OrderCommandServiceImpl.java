@@ -50,7 +50,6 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         Order order = Order.builder()
                 .userId(userId)
-                .totalPrice(totalPrice)
                 .build();
 
         order.addItem(item);
