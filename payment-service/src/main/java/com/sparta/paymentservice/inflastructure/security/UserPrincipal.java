@@ -1,4 +1,4 @@
-package com.sparta.userservice.infrastructure.security;
+package com.sparta.paymentservice.inflastructure.security;
 
 import lombok.Getter;
 

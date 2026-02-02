@@ -1,5 +1,7 @@
 package com.sparta.paymentservice.domain;
 
+import com.sparta.paymentservice.global.exception.BusinessException;
+import com.sparta.paymentservice.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,5 +59,33 @@ public class Payment {
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         this.status = PaymentStatus.PENDING;
+    }
+
+    public void approve(String transactionId) {
+        validateNotDeleted();
+        validateStatus(PaymentStatus.PENDING);
+
+        this.status = PaymentStatus.APPROVED;
+        this.transactionId = transactionId;
+        this.approvedAt = LocalDateTime.now();
+    }
+
+    public void cancel() {
+        validateNotDeleted();
+        validateStatus(PaymentStatus.APPROVED);
+
+        this.status = PaymentStatus.CANCELED;
+    }
+
+    private void validateStatus(PaymentStatus expected) {
+        if (this.status != expected) {
+            throw new BusinessException(ErrorCode.INVALID_PAYMENT_STATUS);
+        }
+    }
+
+    private void validateNotDeleted() {
+        if (this.deletedAt != null) {
+            throw new BusinessException(ErrorCode.PAYMENT_NOT_FOUND);
+        }
     }
 }

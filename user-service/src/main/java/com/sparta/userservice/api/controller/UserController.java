@@ -2,7 +2,6 @@ package com.sparta.userservice.api.controller;
 
 import com.sparta.userservice.application.dto.response.*;
 import com.sparta.userservice.global.response.ApiResponse;
-import com.sparta.userservice.application.dto.request.UserDeleteRequest;
 import com.sparta.userservice.application.dto.request.UserLoginRequest;
 import com.sparta.userservice.application.dto.request.UserSignupRequest;
 import com.sparta.userservice.application.dto.request.UserUpdateRequest;
@@ -17,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
