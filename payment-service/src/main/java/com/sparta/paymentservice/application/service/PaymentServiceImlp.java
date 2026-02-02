@@ -24,7 +24,7 @@ public class PaymentServiceImlp implements PaymentService{
     @Override
     public Payment createPayment(UUID userId, UUID orderId, String paymentMethod) {
 
-        Long orderAmount = orderClient.getOrderAmount(orderId);
+        Long orderAmount = orderClient.getOrderAmount(orderId, "internal-secret");
 
         Payment payment = Payment.builder()
                 .userId(userId)
@@ -36,6 +36,7 @@ public class PaymentServiceImlp implements PaymentService{
         paymentRepository.save(payment);
 
         payment.approve(generateMockTransactionId());
+        orderClient.markOrderAsPaid(orderId, "internal-secret");
 
         return payment;
     }

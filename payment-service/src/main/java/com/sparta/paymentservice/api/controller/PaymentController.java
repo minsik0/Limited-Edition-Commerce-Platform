@@ -54,7 +54,7 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<PaymentResponse>> getPayment(@PathVariable UUID paymentId,
                                                                    Authentication authentication) {
         UUID userId = UUID.fromString(authentication.getName());
-        Payment payment = paymentService.getPayment(userId, paymentId);
+        Payment payment = paymentService.getPayment(paymentId, userId);
         return ResponseEntity.ok(ApiResponse.success(PaymentResponse.from(payment)));
     }
 
@@ -62,7 +62,7 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<Void>> cancelPayment(@PathVariable UUID paymentId,
                                                            Authentication authentication) {
         UUID userId = UUID.fromString(authentication.getName());
-        paymentService.cancelPayment(userId, paymentId);
+        paymentService.cancelPayment(paymentId, userId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

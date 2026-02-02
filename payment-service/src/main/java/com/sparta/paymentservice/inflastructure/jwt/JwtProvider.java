@@ -1,6 +1,8 @@
 package com.sparta.paymentservice.inflastructure.jwt;
 
 
+import com.sparta.paymentservice.global.exception.BusinessException;
+import com.sparta.paymentservice.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -52,7 +54,9 @@ public class JwtProvider {
 
     public String getRole(String token) {
         String role = parseClaims(token).get("role", String.class);
-
+        if (role == null) {
+            throw new IllegalArgumentException("");
+        }
         return role;
     }
 }
