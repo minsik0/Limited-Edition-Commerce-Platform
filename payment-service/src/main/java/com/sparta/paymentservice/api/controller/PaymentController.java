@@ -58,7 +58,7 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success(PaymentResponse.from(payment)));
     }
 
-    @PostMapping("/{paymentId}")
+    @PostMapping("/{paymentId}/cancel")
     public ResponseEntity<ApiResponse<Void>> cancelPayment(@PathVariable UUID paymentId,
                                                            Authentication authentication) {
         UUID userId = UUID.fromString(authentication.getName());

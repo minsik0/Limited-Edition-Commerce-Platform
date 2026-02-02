@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Payment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID paymentId;
 
     @Column(nullable = false, updatable = false)

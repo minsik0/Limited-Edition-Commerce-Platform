@@ -60,7 +60,7 @@ public class PaymentServiceImlp implements PaymentService{
     }
 
     @Override
-    public void cancelPayment(UUID paymentId, UUID userId) {
+    public void cancelPayment(UUID userId, UUID paymentId) {
         Payment payment = getPayment(paymentId, userId);
         payment.cancel();
     }
