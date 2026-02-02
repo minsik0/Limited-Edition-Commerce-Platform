@@ -1,7 +1,8 @@
-package com.sparta.userservice.infrastructure.jwt;
+package com.sparta.paymentservice.inflastructure.jwt;
 
-import com.sparta.userservice.global.exception.BusinessException;
-import com.sparta.userservice.global.exception.ErrorCode;
+
+import com.sparta.paymentservice.global.exception.BusinessException;
+import com.sparta.paymentservice.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -38,25 +39,13 @@ public class JwtProvider {
     }
 
     public Claims parseClaims(String token) {
-        try {
+
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            throw new BusinessException(ErrorCode.EXPIRED_TOKEN);
-        } catch (UnsupportedJwtException e) {
-            throw new BusinessException(ErrorCode.UNSUPPORTED_TOKEN);
-        } catch (MalformedJwtException e) {
-            throw new BusinessException(ErrorCode.MALFORMED_TOKEN);
-        } catch (SecurityException | SignatureException e) {
-            throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.UNKNOWN_ERROR);
-        }
+
     }
 
     public UUID getUserId(String token) {
@@ -66,7 +55,7 @@ public class JwtProvider {
     public String getRole(String token) {
         String role = parseClaims(token).get("role", String.class);
         if (role == null) {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            throw new IllegalArgumentException("");
         }
         return role;
     }

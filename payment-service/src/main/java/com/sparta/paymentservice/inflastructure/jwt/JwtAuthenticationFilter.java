@@ -1,6 +1,6 @@
-package com.sparta.userservice.infrastructure.jwt;
+package com.sparta.paymentservice.inflastructure.jwt;
 
-import com.sparta.userservice.infrastructure.security.UserPrincipal;
+import com.sparta.paymentservice.inflastructure.security.UserPrincipal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

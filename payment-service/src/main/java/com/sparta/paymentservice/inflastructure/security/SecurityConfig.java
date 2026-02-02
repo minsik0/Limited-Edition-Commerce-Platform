@@ -1,6 +1,6 @@
-package com.sparta.userservice.infrastructure.security;
+package com.sparta.paymentservice.inflastructure.security;
 
-import com.sparta.userservice.infrastructure.jwt.JwtAuthenticationFilter;
+import com.sparta.paymentservice.inflastructure.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

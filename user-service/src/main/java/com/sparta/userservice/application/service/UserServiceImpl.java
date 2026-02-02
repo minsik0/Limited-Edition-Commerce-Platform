@@ -7,7 +7,6 @@ import com.sparta.userservice.global.exception.ErrorCode;
 import com.sparta.userservice.domain.User;
 import com.sparta.userservice.domain.UserRole;
 import com.sparta.userservice.domain.UserStatus;
-import com.sparta.userservice.application.dto.request.UserDeleteRequest;
 import com.sparta.userservice.application.dto.request.UserLoginRequest;
 import com.sparta.userservice.application.dto.request.UserSignupRequest;
 import com.sparta.userservice.application.dto.request.UserUpdateRequest;
