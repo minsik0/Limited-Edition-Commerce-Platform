@@ -66,4 +66,12 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    @DeleteMapping("/{paymentId}")
+    public ResponseEntity<ApiResponse<Void>> deletePayment(UUID paymentId,
+                                                           Authentication authentication) {
+        UUID userId = UUID.fromString(authentication.getName());
+        paymentService.deletePayment(paymentId, userId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
 }
