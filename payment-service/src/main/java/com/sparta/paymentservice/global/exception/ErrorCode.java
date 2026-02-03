@@ -12,7 +12,7 @@ public enum ErrorCode {
     PAYMENT_ALREADY_APPROVED("PAYMENT_002", "이미 승인된 결제입니다"),
     PAYMENT_FAILED("PAYMENT_003", "결제에 실패했습니다"),
     INVALID_PAYMENT_STATUS("PAYMENT_004", "결제 상태가 올바르지 않습니다"),
-    PAYMENT_ALREADY_HIDDEN("PAYMENT_005", "결제가 비활성화 되었습니다"),
+    PAYMENT_ALREADY_HIDDEN("PAYMENT_005", "이미 비활성화된 결제입니다"),
 
     // ORDER
     ORDER_NOT_FOUND("ORDER_001", "주문 정보를 찾을 수 없습니다"),
