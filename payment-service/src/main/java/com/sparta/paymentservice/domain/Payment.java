@@ -81,6 +81,9 @@ public class Payment {
         if (this.deletedAt != null) {
             throw new BusinessException(ErrorCode.PAYMENT_ALREADY_HIDDEN);
         }
+        if (this.status != PaymentStatus.APPROVED && this.status != PaymentStatus.CANCELED) {
+            throw new BusinessException(ErrorCode.INVALID_PAYMENT_STATUS);
+        }
         this.deletedAt = LocalDateTime.now();
     }
 

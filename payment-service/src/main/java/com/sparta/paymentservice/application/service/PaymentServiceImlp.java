@@ -67,7 +67,9 @@ public class PaymentServiceImlp implements PaymentService{
 
     @Override
     public void deletePayment(UUID paymentId, UUID userId) {
-        Payment payment = getPayment(paymentId, userId);
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PAYMENT_NOT_FOUND));
+        validateOwner(payment, userId);
         payment.hide();
     }
 

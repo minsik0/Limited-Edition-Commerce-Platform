@@ -67,7 +67,7 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{paymentId}")
-    public ResponseEntity<ApiResponse<Void>> deletePayment(UUID paymentId,
+    public ResponseEntity<ApiResponse<Void>> deletePayment(@PathVariable UUID paymentId,
                                                            Authentication authentication) {
         UUID userId = UUID.fromString(authentication.getName());
         paymentService.deletePayment(paymentId, userId);
