@@ -1,7 +1,7 @@
 package com.sparta.paymentservice.domain;
 
-import com.sparta.paymentservice.global.exception.BusinessException;
-import com.sparta.paymentservice.global.exception.ErrorCode;
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
