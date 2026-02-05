@@ -1,9 +1,9 @@
 package com.sparta.paymentservice.application.service;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.paymentservice.domain.Payment;
 import com.sparta.paymentservice.domain.PaymentStatus;
-import com.sparta.paymentservice.global.exception.BusinessException;
-import com.sparta.paymentservice.global.exception.ErrorCode;
 import com.sparta.paymentservice.inflastructure.PaymentRepository;
 import com.sparta.paymentservice.inflastructure.client.OrderClient;
 import lombok.RequiredArgsConstructor;

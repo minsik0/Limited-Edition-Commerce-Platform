@@ -1,9 +1,11 @@
 package com.sparta.paymentservice.inflastructure.security;
 
-import com.sparta.paymentservice.inflastructure.jwt.JwtAuthenticationFilter;
+import com.sparta.multi_module.common.jwt.JwtAuthenticationFilter;
+import com.sparta.multi_module.common.jwt.JwtCommonConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -11,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
+@Import(JwtCommonConfig.class)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
