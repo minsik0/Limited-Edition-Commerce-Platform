@@ -1,9 +1,9 @@
 package com.sparta.userservice.application.service;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
+import com.sparta.multi_module.common.jwt.JwtProvider;
 import com.sparta.userservice.application.dto.response.*;
-import com.sparta.userservice.infrastructure.jwt.JwtProvider;
-import com.sparta.userservice.global.exception.BusinessException;
-import com.sparta.userservice.global.exception.ErrorCode;
 import com.sparta.userservice.domain.User;
 import com.sparta.userservice.domain.UserRole;
 import com.sparta.userservice.domain.UserStatus;
