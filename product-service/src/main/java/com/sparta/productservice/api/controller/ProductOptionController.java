@@ -1,11 +1,10 @@
 package com.sparta.productservice.api.controller;
 
+import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.productservice.application.dto.request.ProductOptionCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductOptionUpdateRequest;
 import com.sparta.productservice.application.dto.response.ProductOptionResponse;
-import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.application.service.ProductOptionService;
-import com.sparta.productservice.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

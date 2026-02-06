@@ -1,13 +1,13 @@
 package com.sparta.productservice.application.service;
 
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
 import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.domain.product.ProductStatus;
-import com.sparta.productservice.global.exception.BusinessException;
-import com.sparta.productservice.global.exception.ErrorCode;
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

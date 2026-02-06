@@ -1,5 +1,6 @@
 package com.sparta.productservice.api.controller;
 
+import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
 import com.sparta.productservice.application.dto.response.ProductResponse;
@@ -7,7 +8,6 @@ import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.application.dto.response.ProductSummaryResponse;
 import com.sparta.productservice.application.service.ProductCommandService;
 import com.sparta.productservice.application.service.ProductQueryService;
-import com.sparta.productservice.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
