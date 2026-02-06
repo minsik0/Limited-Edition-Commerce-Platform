@@ -1,12 +1,12 @@
 package com.sparta.productservice.application.service;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.productservice.application.dto.request.ProductOptionCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductOptionUpdateRequest;
 import com.sparta.productservice.application.dto.response.ProductOptionResponse;
 import com.sparta.productservice.domain.option.ProductOption;
 import com.sparta.productservice.domain.product.Product;
-import com.sparta.productservice.global.exception.BusinessException;
-import com.sparta.productservice.global.exception.ErrorCode;
 import com.sparta.productservice.infrastructure.persistence.ProductOptionRepository;
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;

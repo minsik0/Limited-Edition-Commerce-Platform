@@ -1,8 +1,8 @@
 package com.sparta.productservice.domain.option;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.productservice.domain.product.Product;
-import com.sparta.productservice.global.exception.BusinessException;
-import com.sparta.productservice.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
