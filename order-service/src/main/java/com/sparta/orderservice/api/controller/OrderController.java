@@ -1,9 +1,9 @@
 package com.sparta.orderservice.api.controller;
 
+import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.orderservice.application.dto.request.CreateOrderRequest;
 import com.sparta.orderservice.application.dto.response.CreateOrderResponse;
 import com.sparta.orderservice.application.service.OrderCommandService;
-import com.sparta.orderservice.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

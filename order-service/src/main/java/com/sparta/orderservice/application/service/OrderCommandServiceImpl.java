@@ -1,12 +1,11 @@
 package com.sparta.orderservice.application.service;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.orderservice.application.dto.request.CreateOrderRequest;
 import com.sparta.orderservice.application.dto.response.CreateOrderResponse;
 import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
-import com.sparta.orderservice.domain.order.OrderStatus;
-import com.sparta.orderservice.global.exception.BusinessException;
-import com.sparta.orderservice.global.exception.ErrorCode;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.sparta.orderservice.domain.order;
 
-import com.sparta.orderservice.global.exception.BusinessException;
-import com.sparta.orderservice.global.exception.ErrorCode;
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

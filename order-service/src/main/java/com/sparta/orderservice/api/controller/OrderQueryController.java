@@ -1,10 +1,10 @@
 package com.sparta.orderservice.api.controller;
 
+import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.orderservice.application.dto.response.OrderResponse;
 import com.sparta.orderservice.application.dto.response.OrderSummaryResponse;
 import com.sparta.orderservice.application.service.OrderQueryService;
 import com.sparta.orderservice.domain.order.OrderStatus;
-import com.sparta.orderservice.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
