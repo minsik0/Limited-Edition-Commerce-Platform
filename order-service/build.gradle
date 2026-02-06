@@ -22,9 +22,12 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.1'
+
 	//env
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
