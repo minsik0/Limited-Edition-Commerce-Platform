@@ -1,7 +1,7 @@
 package com.sparta.userservice.api.controller;
 
+import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.userservice.application.dto.response.*;
-import com.sparta.userservice.global.response.ApiResponse;
 import com.sparta.userservice.application.dto.request.UserLoginRequest;
 import com.sparta.userservice.application.dto.request.UserSignupRequest;
 import com.sparta.userservice.application.dto.request.UserUpdateRequest;
