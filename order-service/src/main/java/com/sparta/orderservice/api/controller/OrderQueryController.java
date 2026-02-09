@@ -9,6 +9,7 @@ import com.sparta.orderservice.infrastructure.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,17 +23,17 @@ public class OrderQueryController {
     private final OrderQueryService orderQueryService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<OrderSummaryResponse>>> getOrders(Authentication authentication,
+    public ResponseEntity<ApiResponse<List<OrderSummaryResponse>>> getOrders(@AuthenticationPrincipal UserPrincipal principal,
                                                                              @RequestParam(required = false) OrderStatus status) {
-        UUID userId = ((UserPrincipal) authentication.getPrincipal()).getUserId();
+        UUID userId = principal.getUserId();
         List<OrderSummaryResponse> responses = orderQueryService.getOrders(userId, status);
         return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<ApiResponse<OrderResponse>> getOrder(Authentication authentication,
+    public ResponseEntity<ApiResponse<OrderResponse>> getOrder(@AuthenticationPrincipal UserPrincipal principal,
                                                                @PathVariable UUID orderId) {
-        UUID userId = ((UserPrincipal) authentication.getPrincipal()).getUserId();
+        UUID userId = principal.getUserId();
         OrderResponse response = orderQueryService.getOrder(userId, orderId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
