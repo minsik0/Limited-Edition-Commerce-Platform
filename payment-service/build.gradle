@@ -26,6 +26,9 @@ repositories {
 }
 
 dependencies {
+	// DB
+	runtimeOnly 'org.postgresql:postgresql'
+
 	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.1'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
