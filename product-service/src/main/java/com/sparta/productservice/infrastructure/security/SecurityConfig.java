@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("MASTER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("MASTER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
