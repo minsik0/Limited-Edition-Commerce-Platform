@@ -28,7 +28,10 @@ public class SecurityConfig {
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/signup", "/users/login").permitAll()
+                        // 내부 서비스 간 호출 허용
+                        .requestMatchers("/internal/**").permitAll()
+
+                        // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
