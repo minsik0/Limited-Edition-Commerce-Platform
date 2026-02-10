@@ -1,4 +1,4 @@
-package com.sparta.paymentservice.inflastructure.security;
+package com.sparta.paymentservice.infrastructure.security;
 
 import com.sparta.multi_module.common.jwt.JwtAuthenticationFilter;
 import com.sparta.multi_module.common.jwt.JwtCommonConfig;

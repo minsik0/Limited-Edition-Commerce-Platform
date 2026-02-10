@@ -4,8 +4,8 @@ import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.paymentservice.domain.Payment;
 import com.sparta.paymentservice.domain.PaymentStatus;
-import com.sparta.paymentservice.inflastructure.PaymentRepository;
-import com.sparta.paymentservice.inflastructure.client.OrderClient;
+import com.sparta.paymentservice.infrastructure.PaymentRepository;
+import com.sparta.paymentservice.infrastructure.client.OrderClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PaymentServiceImlp implements PaymentService{
+public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final OrderClient orderClient;
@@ -52,7 +52,7 @@ public class PaymentServiceImlp implements PaymentService{
 
     @Override
     public Payment getPayment(UUID paymentId, UUID userId) {
-        Payment payment = paymentRepository.findByIdAndDeletedAtIsNull(paymentId)
+        Payment payment = paymentRepository.findByPaymentIdAndDeletedAtIsNull(paymentId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.PAYMENT_NOT_FOUND));
 
         validateOwner(payment, userId);

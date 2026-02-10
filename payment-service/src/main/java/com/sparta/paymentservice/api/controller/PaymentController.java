@@ -6,7 +6,7 @@ import com.sparta.paymentservice.application.dto.response.PaymentResponse;
 import com.sparta.paymentservice.application.service.PaymentService;
 import com.sparta.paymentservice.domain.Payment;
 import com.sparta.paymentservice.domain.PaymentStatus;
-import com.sparta.paymentservice.inflastructure.security.UserPrincipal;
+import com.sparta.paymentservice.infrastructure.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
