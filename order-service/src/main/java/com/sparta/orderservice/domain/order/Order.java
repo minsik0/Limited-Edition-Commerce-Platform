@@ -68,5 +68,6 @@ public class Order {
             throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
         }
         this.status = OrderStatus.PAID;
+        this.updatedAt = LocalDateTime.now();
     }
 }

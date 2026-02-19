@@ -1,5 +1,7 @@
 package com.sparta.orderservice.api.controller;
 
+import com.sparta.multi_module.common.exception.BusinessException;
+import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.orderservice.application.service.OrderCommandService;
 import com.sparta.orderservice.application.service.OrderQueryService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,12 @@ public class OrderInternalController {
     }
 
     @GetMapping("/{orderId}/amount")
-    public Long getOrderAmount(@PathVariable UUID orderId) {
+    public Long getOrderAmount(@PathVariable UUID orderId,
+                               @RequestHeader("X-Internal-Call") String internalCall) {
+        if(!"true".equals(internalCall)) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST);
+        }
+
         return orderQueryService.getOrderAmount(orderId);
     }
 }
