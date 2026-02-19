@@ -11,4 +11,6 @@ public interface OrderCommandService {
     CreateOrderResponse create(UUID userId, CreateOrderRequest request);
 
     void cancelOrder(UUID userId, UUID orderId);
+
+    void markOrderAsPaid(UUID orderId);
 }

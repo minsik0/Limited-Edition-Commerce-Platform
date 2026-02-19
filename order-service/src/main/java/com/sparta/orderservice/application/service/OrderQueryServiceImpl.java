@@ -57,6 +57,14 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
     }
 
+    @Override
+    public Long getOrderAmount(UUID orderId) {
+        Order order = orderRepository.findById(orderId).
+                orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
+
+        return (long) order.getTotalPrice();
+    }
+
     /*
     * @param item 변환할 OrderItem 엔티티
     * @return 변환된 OrderItemResponse DTO

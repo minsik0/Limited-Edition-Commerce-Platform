@@ -65,4 +65,12 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         order.cancel();
     }
+
+    @Override
+    public void markOrderAsPaid(UUID orderId) {
+        Order order = orderRepository.findById(orderId).
+                orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
+
+        order.markAsPaid();
+    }
 }

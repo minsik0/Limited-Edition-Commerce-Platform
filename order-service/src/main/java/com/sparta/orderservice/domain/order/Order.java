@@ -62,4 +62,12 @@ public class Order {
         this.status = OrderStatus.CANCELED;
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void markAsPaid() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
+        }
+        this.status = OrderStatus.PAID;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
