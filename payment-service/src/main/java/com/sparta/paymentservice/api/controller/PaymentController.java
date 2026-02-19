@@ -1,12 +1,12 @@
 package com.sparta.paymentservice.api.controller;
 
 import com.sparta.multi_module.common.response.ApiResponse;
+import com.sparta.multi_module.common.security.DefaultAuthenticatedUser;
 import com.sparta.paymentservice.application.dto.request.PaymentCreateRequest;
 import com.sparta.paymentservice.application.dto.response.PaymentResponse;
 import com.sparta.paymentservice.application.service.PaymentService;
 import com.sparta.paymentservice.domain.Payment;
 import com.sparta.paymentservice.domain.PaymentStatus;
-import com.sparta.paymentservice.infrastructure.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(@RequestBody PaymentCreateRequest request,
-                                                                      @AuthenticationPrincipal UserPrincipal principal) {
+                                                                      @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
 
         Payment payment = paymentService.createPayment(
@@ -40,7 +40,7 @@ public class PaymentController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPayments(@RequestParam(required = false) PaymentStatus status,
-                                                                           @AuthenticationPrincipal UserPrincipal principal) {
+                                                                          @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
 
         List<PaymentResponse> responses = paymentService.getPayments(userId, status)
@@ -53,7 +53,7 @@ public class PaymentController {
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPayment(@PathVariable UUID paymentId,
-                                                                   @AuthenticationPrincipal UserPrincipal principal) {
+                                                                   @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
         Payment payment = paymentService.getPayment(paymentId, userId);
         return ResponseEntity.ok(ApiResponse.success(PaymentResponse.from(payment)));
@@ -61,7 +61,7 @@ public class PaymentController {
 
     @PostMapping("/{paymentId}/cancel")
     public ResponseEntity<ApiResponse<Void>> cancelPayment(@PathVariable UUID paymentId,
-                                                           @AuthenticationPrincipal UserPrincipal principal) {
+                                                           @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
         paymentService.cancelPayment(paymentId, userId);
         return ResponseEntity.ok(ApiResponse.success(null));
@@ -69,7 +69,7 @@ public class PaymentController {
 
     @DeleteMapping("/{paymentId}")
     public ResponseEntity<ApiResponse<Void>> deletePayment(@PathVariable UUID paymentId,
-                                                           @AuthenticationPrincipal UserPrincipal principal) {
+                                                           @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
         paymentService.deletePayment(paymentId, userId);
         return ResponseEntity.ok(ApiResponse.success(null));

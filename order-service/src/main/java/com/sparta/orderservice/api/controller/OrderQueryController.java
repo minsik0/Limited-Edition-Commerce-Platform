@@ -1,6 +1,8 @@
 package com.sparta.orderservice.api.controller;
 
 import com.sparta.multi_module.common.response.ApiResponse;
+import com.sparta.multi_module.common.security.AuthenticatedUser;
+import com.sparta.multi_module.common.security.DefaultAuthenticatedUser;
 import com.sparta.orderservice.application.dto.response.OrderResponse;
 import com.sparta.orderservice.application.dto.response.OrderSummaryResponse;
 import com.sparta.orderservice.application.service.OrderQueryService;
@@ -23,7 +25,7 @@ public class OrderQueryController {
     private final OrderQueryService orderQueryService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<OrderSummaryResponse>>> getOrders(@AuthenticationPrincipal UserPrincipal principal,
+    public ResponseEntity<ApiResponse<List<OrderSummaryResponse>>> getOrders(@AuthenticationPrincipal DefaultAuthenticatedUser principal,
                                                                              @RequestParam(required = false) OrderStatus status) {
         UUID userId = principal.getUserId();
         List<OrderSummaryResponse> responses = orderQueryService.getOrders(userId, status);
@@ -31,7 +33,7 @@ public class OrderQueryController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<ApiResponse<OrderResponse>> getOrder(@AuthenticationPrincipal UserPrincipal principal,
+    public ResponseEntity<ApiResponse<OrderResponse>> getOrder(@AuthenticationPrincipal DefaultAuthenticatedUser principal,
                                                                @PathVariable UUID orderId) {
         UUID userId = principal.getUserId();
         OrderResponse response = orderQueryService.getOrder(userId, orderId);
