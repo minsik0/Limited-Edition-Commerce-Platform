@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.1'
+	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.2'
 
 	//env
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
