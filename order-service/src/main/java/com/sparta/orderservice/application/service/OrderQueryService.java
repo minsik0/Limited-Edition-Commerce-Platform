@@ -13,4 +13,6 @@ public interface OrderQueryService {
     List<OrderSummaryResponse> getOrders(UUID userId, OrderStatus status);
 
     OrderResponse getOrder(UUID userId, UUID orderId);
+
+    Long getOrderAmount(UUID orderId);
 }
