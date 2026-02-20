@@ -7,6 +7,8 @@ import com.sparta.orderservice.application.dto.response.CreateOrderResponse;
 import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
 import com.sparta.orderservice.infrastructure.OrderRepository;
+import com.sparta.orderservice.infrastructure.client.ProductClient;
+import com.sparta.productservice.application.dto.response.ProductOptionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,33 +21,32 @@ import java.util.UUID;
 public class OrderCommandServiceImpl implements OrderCommandService {
 
     private final OrderRepository orderRepository;
+    private final ProductClient productClient;
 
     @Override
     public CreateOrderResponse create(UUID userId, CreateOrderRequest request) {
-
-        /*
-         * TODO
-         * 1. Product 서비스 호출
-         * - 상품/옵션 조회
-         * - 가격, 이름 스냅샷 확보
-         * 2. 재고 차감 (추후)
-         */
-
-        //임시 데이터
-        String productName = "임시 상품명";
-        String optionName = "임시 옵션명";
-        int price = 100_000;
-
+        //상품 조회
+        ProductOptionResponse product = productClient
+                .getProductOption(request.getProductId(),request.getOptionId());
+        //재고 검증
+        if(product.getRemainStock() < request.getQuantity()) {
+            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
+        }
+        //재고 차감
+        productClient.deductStock(
+                request.getProductId(),
+                request.getOptionId(),
+                request.getQuantity()
+        );
+        //Item 생성
         OrderItem item = OrderItem.builder()
-                .productId(request.getProductId())
-                .productName(productName)
-                .optionId(request.getOptionId())
-                .optionName(optionName)
-                .price(price)
+                .productId(product.productId())
+                .productName(product.productName())
+                .optionId(product.optionId())
+                .optionName(product.optionName())
+                .price(product.price())
                 .quantity(request.getQuantity())
                 .build();
-
-        int totalPrice = item.calculateTotalPrice();
 
         Order order = Order.builder()
                 .userId(userId)
