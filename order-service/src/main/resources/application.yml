@@ -14,3 +14,7 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-ms: 3600000
   issuer: limited-edition-commerce-platform
+
+product:
+  service:
+    url: ${PRODUCT-SERVICE_URL:localhost:19020}
