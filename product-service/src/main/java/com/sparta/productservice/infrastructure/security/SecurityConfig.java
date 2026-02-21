@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -32,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("MASTER")
-                        .requestMatchers("/internal/**").permitAll()
+                        .requestMatchers ( "/internal/**" ).access(new WebExpressionAuthorizationManager("hasIpAddress ( '127.0.0.1' )"))
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
