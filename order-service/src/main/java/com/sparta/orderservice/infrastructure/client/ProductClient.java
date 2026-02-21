@@ -1,5 +1,6 @@
 package com.sparta.orderservice.infrastructure.client;
 
+import com.sparta.productservice.application.dto.response.ProductOptionForOrderResponse;
 import com.sparta.productservice.application.dto.response.ProductOptionResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public interface ProductClient {
 
     @GetMapping("/internal/products/{productId}/options/{optionId}")
-    ProductOptionResponse getProductOption(
+    ProductOptionForOrderResponse getProductOption(
             @PathVariable UUID productId,
             @PathVariable UUID optionId
     );

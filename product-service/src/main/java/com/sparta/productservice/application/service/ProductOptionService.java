@@ -2,6 +2,7 @@ package com.sparta.productservice.application.service;
 
 import com.sparta.productservice.application.dto.request.ProductOptionCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductOptionUpdateRequest;
+import com.sparta.productservice.application.dto.response.ProductOptionForOrderResponse;
 import com.sparta.productservice.application.dto.response.ProductOptionResponse;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,6 @@ public interface ProductOptionService {
 
     List<ProductOptionResponse> getByProductId(UUID productId);
 
+    ProductOptionForOrderResponse getOptionForOrder(UUID productId, UUID optionId);
 
 }

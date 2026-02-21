@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("MASTER")
+                        .requestMatchers("/internal/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
