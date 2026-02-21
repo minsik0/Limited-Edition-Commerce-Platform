@@ -4,6 +4,7 @@ import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.productservice.application.dto.request.ProductOptionCreateRequest;
 import com.sparta.productservice.application.dto.request.ProductOptionUpdateRequest;
+import com.sparta.productservice.application.dto.response.ProductOptionForOrderResponse;
 import com.sparta.productservice.application.dto.response.ProductOptionResponse;
 import com.sparta.productservice.domain.option.ProductOption;
 import com.sparta.productservice.domain.product.Product;
@@ -60,6 +61,22 @@ public class ProductOptionServiceImpl implements ProductOptionService {
                 .stream()
                 .map(ProductOptionResponse::from)
                 .toList();
+    }
+
+    @Override
+    public ProductOptionForOrderResponse getOptionForOrder(UUID productId, UUID optionId) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        ProductOption option = productOptionRepository.findById(optionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
+
+        if (!option.getProduct().getProductId().equals(product.getProductId())) {
+            throw new BusinessException(ErrorCode.OPTION_NOT_FOUND);
+        }
+
+        return ProductOptionForOrderResponse.from(product, option);
     }
 
     private ProductOption findOption(UUID optionId) {

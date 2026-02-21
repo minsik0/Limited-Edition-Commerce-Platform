@@ -8,7 +8,7 @@ import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import com.sparta.orderservice.infrastructure.client.ProductClient;
-import com.sparta.productservice.application.dto.response.ProductOptionResponse;
+import com.sparta.productservice.application.dto.response.ProductOptionForOrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     @Override
     public CreateOrderResponse create(UUID userId, CreateOrderRequest request) {
         //상품 조회
-        ProductOptionResponse product = productClient
+        ProductOptionForOrderResponse product = productClient
                 .getProductOption(request.getProductId(),request.getOptionId());
         //재고 검증
         if(product.getRemainStock() < request.getQuantity()) {
@@ -40,11 +40,11 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         );
         //Item 생성
         OrderItem item = OrderItem.builder()
-                .productId(product.productId())
-                .productName(product.productName())
-                .optionId(product.optionId())
-                .optionName(product.optionName())
-                .price(product.price())
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .optionId(product.getOptionId())
+                .optionName(product.getOptionName())
+                .price(product.getPrice())
                 .quantity(request.getQuantity())
                 .build();
 
