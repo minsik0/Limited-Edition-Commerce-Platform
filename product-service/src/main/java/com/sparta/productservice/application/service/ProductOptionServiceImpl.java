@@ -72,6 +72,10 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         ProductOption option = productOptionRepository.findById(optionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
 
+        if (!option.getProduct().getProductId().equals(product.getProductId())) {
+            throw new BusinessException(ErrorCode.OPTION_NOT_FOUND);
+        }
+
         return ProductOptionForOrderResponse.from(product, option);
     }
 
