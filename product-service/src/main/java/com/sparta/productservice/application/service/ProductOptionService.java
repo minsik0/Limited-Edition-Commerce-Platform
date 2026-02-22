@@ -22,4 +22,5 @@ public interface ProductOptionService {
 
     ProductOptionForOrderResponse getOptionForOrder(UUID productId, UUID optionId);
 
+    void deductStock(UUID productId, UUID optionId, int quantity);
 }

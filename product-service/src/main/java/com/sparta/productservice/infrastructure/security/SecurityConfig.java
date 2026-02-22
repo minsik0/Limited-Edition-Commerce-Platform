@@ -30,10 +30,10 @@ public class SecurityConfig {
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers ( "/internal/**" ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("MASTER")
-                        .requestMatchers ( "/internal/**" ).access(new WebExpressionAuthorizationManager("hasIpAddress ( '127.0.0.1' )"))
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

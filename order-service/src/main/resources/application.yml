@@ -17,4 +17,4 @@ jwt:
 
 product:
   service:
-    url: ${PRODUCT-SERVICE_URL:localhost:19020}
+    url: ${PRODUCT_SERVICE_URL:http://localhost:19020}

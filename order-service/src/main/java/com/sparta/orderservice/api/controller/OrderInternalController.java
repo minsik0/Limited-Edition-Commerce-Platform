@@ -25,7 +25,7 @@ public class OrderInternalController {
     @GetMapping("/{orderId}/amount")
     public Long getOrderAmount(@PathVariable UUID orderId,
                                @RequestHeader("X-Internal-Call") String internalCall) {
-        if(!"true".equals(internalCall)) {
+        if (!"internal-secret".equals(internalCall)) {
             throw new BusinessException(ErrorCode.INVALID_REQUEST);
         }
 
