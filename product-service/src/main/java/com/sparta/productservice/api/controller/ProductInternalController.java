@@ -23,10 +23,6 @@ public class ProductInternalController {
 
     @PostMapping("/{productId}/options/{optionId}/deduct")
     public void deductStock(@PathVariable UUID productId, @PathVariable UUID optionId, @RequestParam int quantity) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("AUTH = " + auth);
-
         productOptionService.deductStock(productId, optionId, quantity);
     }
 }
