@@ -1,7 +1,6 @@
 package com.sparta.orderservice.infrastructure.client;
 
-import com.sparta.productservice.application.dto.response.ProductOptionForOrderResponse;
-import com.sparta.productservice.application.dto.response.ProductOptionResponse;
+import com.sparta.orderservice.application.dto.response.ProductOptionForOrderResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

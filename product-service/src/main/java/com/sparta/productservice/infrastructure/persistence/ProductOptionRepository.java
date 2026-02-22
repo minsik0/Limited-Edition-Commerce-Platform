@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductOptionRepository extends JpaRepository<ProductOption, UUID> {
@@ -27,4 +28,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, UU
           AND o.deletedAt IS NULL
     """)
     long countRemainStockByProductId(@Param("productId") UUID productId);
+
+    Optional<ProductOption> findByOptionIdAndProduct_ProductId(UUID optionId, UUID productId);
 }

@@ -66,17 +66,21 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionForOrderResponse getOptionForOrder(UUID productId, UUID optionId) {
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
-
-        ProductOption option = productOptionRepository.findById(optionId)
+        ProductOption option = productOptionRepository
+                .findByOptionIdAndProduct_ProductId(optionId, productId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
 
-        if (!option.getProduct().getProductId().equals(product.getProductId())) {
-            throw new BusinessException(ErrorCode.OPTION_NOT_FOUND);
-        }
+        return ProductOptionForOrderResponse.from(option.getProduct(), option);
+    }
 
-        return ProductOptionForOrderResponse.from(product, option);
+    @Override
+    public void deductStock(UUID productId, UUID optionId, int quantity) {
+
+        ProductOption option = productOptionRepository
+                .findByOptionIdAndProduct_ProductId(optionId, productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
+
+        option.decreaseStock(quantity);
     }
 
     private ProductOption findOption(UUID optionId) {
