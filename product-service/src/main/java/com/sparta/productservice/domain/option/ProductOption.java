@@ -38,7 +38,6 @@ public class ProductOption {
 
     private LocalDateTime deletedAt;
 
-    // 🔹 Builder
     @Builder
     protected ProductOption(
             Product product,
