@@ -27,6 +27,9 @@ public class ProductOption {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Version
+    private Long version;
+
     @Column(nullable = false)
     private String size;
 

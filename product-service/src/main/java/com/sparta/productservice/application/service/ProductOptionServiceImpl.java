@@ -11,6 +11,7 @@ import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.infrastructure.persistence.ProductOptionRepository;
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,13 +75,27 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     }
 
     @Override
-    public void deductStock(UUID productId, UUID optionId, int quantity) {
+    public void deductStockWithRetry(UUID productId, UUID optionId, int quantity) {
 
-        ProductOption option = productOptionRepository
-                .findByOptionIdAndProduct_ProductId(optionId, productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
+        int retry = 0;
+        int maxRetry = 3;
 
-        option.decreaseStock(quantity);
+        while (retry < maxRetry) {
+            try {
+                ProductOption option = productOptionRepository
+                        .findByOptionIdAndProduct_ProductId(optionId, productId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
+
+                option.decreaseStock(quantity);
+                return;
+            }catch (ObjectOptimisticLockingFailureException e) {
+                retry++;
+                if(retry == maxRetry) {
+                    throw e;
+                }
+            }
+        }
+
     }
 
     private ProductOption findOption(UUID optionId) {
