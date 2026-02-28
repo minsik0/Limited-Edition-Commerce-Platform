@@ -28,10 +28,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         //상품 조회
         ProductOptionForOrderResponse product = productClient
                 .getProductOption(request.getProductId(),request.getOptionId());
-        //재고 검증
-        if(product.getRemainStock() < request.getQuantity()) {
-            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
-        }
+
         //재고 차감
         productClient.deductStock(
                 request.getProductId(),
