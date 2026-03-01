@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
-@Table(name = "payments")
+@Table(name = "payments", uniqueConstraints = {@UniqueConstraint(name = "uk_payment_order", columnNames = "order_id")})
 @NoArgsConstructor(access = PROTECTED)
 public class Payment {
 
