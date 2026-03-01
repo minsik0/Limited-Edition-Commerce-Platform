@@ -22,7 +22,7 @@ public class ProductInternalController {
     }
 
     @PostMapping("/{productId}/options/{optionId}/deduct")
-    public void deductStockWithRetry(@PathVariable UUID productId, @PathVariable UUID optionId, @RequestParam int quantity) {
-        productOptionService.deductStockWithRetry(productId, optionId, quantity);
+    public void deductStock(@PathVariable UUID productId, @PathVariable UUID optionId, @RequestParam int quantity) {
+        productOptionService.deductStock(productId, optionId, quantity);
     }
 }

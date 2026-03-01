@@ -75,27 +75,12 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     }
 
     @Override
-    public void deductStockWithRetry(UUID productId, UUID optionId, int quantity) {
+    public void deductStock(UUID productId, UUID optionId, int quantity) {
 
-        int retry = 0;
-        int maxRetry = 3;
+        ProductOption option = productOptionRepository.findForUpdate(optionId, productId).
+                orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
 
-        while (retry < maxRetry) {
-            try {
-                ProductOption option = productOptionRepository
-                        .findByOptionIdAndProduct_ProductId(optionId, productId)
-                        .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
-
-                option.decreaseStock(quantity);
-                return;
-            }catch (ObjectOptimisticLockingFailureException e) {
-                retry++;
-                if(retry == maxRetry) {
-                    throw e;
-                }
-            }
-        }
-
+        option.decreaseStock(quantity);
     }
 
     private ProductOption findOption(UUID optionId) {
