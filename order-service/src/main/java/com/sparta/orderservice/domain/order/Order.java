@@ -21,6 +21,7 @@ public class Order {
 
     @Id
     @GeneratedValue
+    @Column(nullable = false, updatable = false, unique = true)
     private UUID orderId;
 
     @Column(nullable = false)
@@ -64,9 +65,14 @@ public class Order {
     }
 
     public void markAsPaid() {
+        if (this.status == OrderStatus.PAID) {
+            return;
+        }
+
         if (this.status != OrderStatus.CREATED) {
             throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
         }
+
         this.status = OrderStatus.PAID;
         this.updatedAt = LocalDateTime.now();
     }

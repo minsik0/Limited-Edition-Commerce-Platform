@@ -1,7 +1,9 @@
 package com.sparta.productservice.infrastructure.persistence;
 
 import com.sparta.productservice.domain.option.ProductOption;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -30,4 +32,11 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, UU
     long countRemainStockByProductId(@Param("productId") UUID productId);
 
     Optional<ProductOption> findByOptionIdAndProduct_ProductId(UUID optionId, UUID productId);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+    SELECT o FROM ProductOption o
+    WHERE o.optionId = :optionId
+      AND o.product.productId = :productId
+    """)
+    Optional<ProductOption> findForUpdate(@Param("optionId") UUID optionId, @Param("productId") UUID productId);
 }

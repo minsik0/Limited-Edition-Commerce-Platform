@@ -7,10 +7,12 @@ import com.sparta.paymentservice.domain.PaymentStatus;
 import com.sparta.paymentservice.infrastructure.PaymentRepository;
 import com.sparta.paymentservice.infrastructure.client.OrderClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,6 +26,11 @@ public class PaymentServiceImpl implements PaymentService{
     @Override
     public Payment createPayment(UUID userId, UUID orderId, String paymentMethod) {
 
+        Optional<Payment> existing = paymentRepository.findByOrderId(orderId);
+        if(existing.isPresent()){
+            return  existing.get();
+        }
+
         Long orderAmount = orderClient.getOrderAmount(orderId, "internal-secret");
 
         Payment payment = Payment.builder()
@@ -33,7 +40,12 @@ public class PaymentServiceImpl implements PaymentService{
                 .amount(orderAmount)
                 .build();
 
-        paymentRepository.save(payment);
+        try {
+            paymentRepository.save(payment);
+        }catch (DataIntegrityViolationException e) {
+            return paymentRepository.findByOrderId(orderId).
+                    orElseThrow(() -> e);
+        }
 
         payment.approve(generateMockTransactionId());
         orderClient.markOrderAsPaid(orderId, "internal-secret");
