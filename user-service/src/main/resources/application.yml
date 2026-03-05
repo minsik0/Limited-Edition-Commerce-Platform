@@ -12,5 +12,5 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration-ms: 3600000
+  access-token-expiration-ms: 360000000
   issuer: limited-edition-commerce-platform
