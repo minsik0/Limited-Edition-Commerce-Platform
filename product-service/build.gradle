@@ -26,6 +26,8 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.flywaydb:flyway-core'
+
 	//더미데이터 생성
 	implementation 'net.datafaker:datafaker:2.1.0'
 

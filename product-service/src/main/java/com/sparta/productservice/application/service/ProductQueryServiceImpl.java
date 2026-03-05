@@ -9,7 +9,9 @@ import com.sparta.productservice.infrastructure.persistence.ProductOptionReposit
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,14 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public Page<ProductSummaryResponse> getPage(Pageable pageable) {
-        return productRepository.findByDeletedAtIsNull(pageable)
+
+        Pageable sortPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "openAt")
+        );
+        System.out.println("정렬 적용된 getPage 실행됨");
+        return productRepository.findByDeletedAtIsNull(sortPageable)
                 .map(ProductSummaryResponse::from);
     }
 

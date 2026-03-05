@@ -26,6 +26,8 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.flywaydb:flyway-core'
+
 	// DB
 	runtimeOnly 'org.postgresql:postgresql'
 
