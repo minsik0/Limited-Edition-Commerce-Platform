@@ -30,6 +30,12 @@ public class ProductOptionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(Map.of("optionId", optionId)));
     }
 
+    @PostMapping("/atomic-stock")
+    public ResponseEntity<Void> decreaseStockAtomic(@RequestParam UUID productId, @RequestParam UUID optionId, @RequestParam int quantity) {
+        productOptionService.decreaseStockAtomic(productId, optionId, quantity);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public  ResponseEntity<ApiResponse<List<ProductOptionResponse>>> getByProduct(@PathVariable UUID productId) {
 
