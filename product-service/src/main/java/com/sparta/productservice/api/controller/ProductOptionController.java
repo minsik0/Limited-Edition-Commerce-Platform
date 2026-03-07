@@ -31,7 +31,7 @@ public class ProductOptionController {
     }
 
     @PostMapping("/atomic-stock")
-    public ResponseEntity<Void> decreaseStockAtomic(@RequestParam UUID productId, @RequestParam UUID optionId, @RequestParam int quantity) {
+    public ResponseEntity<Void> decreaseStockAtomic(@PathVariable UUID productId, @PathVariable UUID optionId, @PathVariable int quantity) {
         productOptionService.decreaseStockAtomic(productId, optionId, quantity);
         return ResponseEntity.ok().build();
     }
