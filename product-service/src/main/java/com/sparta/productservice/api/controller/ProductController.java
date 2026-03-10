@@ -50,8 +50,8 @@ public class ProductController {
 
     @GetMapping("/cursor")
     public ResponseEntity<ApiResponse<CursorPageResponse<ProductSummaryResponse>>> getCursorPage(@PathVariable UUID cursorId,
-                                                                                                 @RequestParam int size,
-                                                                                                 @RequestParam LocalDateTime cursorOpenAt) {
+                                                                                                 @RequestParam(defaultValue = "20") int size,
+                                                                                                 @RequestParam(required = false) LocalDateTime cursorOpenAt) {
 
         ProductCursorRequest request = new ProductCursorRequest(cursorId, size, cursorOpenAt);
         return ResponseEntity.ok(ApiResponse.success(productQueryService.getCursorPage(request)));
