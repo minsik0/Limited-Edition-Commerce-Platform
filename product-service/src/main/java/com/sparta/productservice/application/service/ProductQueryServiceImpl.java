@@ -2,6 +2,8 @@ package com.sparta.productservice.application.service;
 
 import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
+import com.sparta.productservice.application.dto.request.ProductCursorRequest;
+import com.sparta.productservice.application.dto.response.CursorPageResponse;
 import com.sparta.productservice.application.dto.response.ProductResponse;
 import com.sparta.productservice.application.dto.response.ProductSummaryResponse;
 import com.sparta.productservice.domain.product.Product;
@@ -15,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +51,37 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         int currentQuantity = productOptionRepository.sumRemainStockByProductId(productId);
 
         return ProductResponse.of(product, currentQuantity);
+    }
+
+    @Override
+    public CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request) {
+
+        Pageable pageable = PageRequest.of(0, request.getSize() + 1);
+
+        List<Product> products = productRepository.findCursorPage(
+                request.getCursorOpenAt(),
+                request.getCursorId(),
+                pageable
+        );
+
+        boolean hasNext = products.size() > request.getSize();
+        List<Product> contentProducts = hasNext ? products.subList(0, request.getSize()) : products;
+
+        List<ProductSummaryResponse> contents = products
+                .stream()
+                .map(ProductSummaryResponse::from)
+                .toList();
+
+        LocalDateTime nextCursorOpenAt = null;
+        UUID nextCursorId = null;
+
+        if (hasNext) {
+            Product lastProduct = contentProducts.get(contentProducts.size() - 1);
+            nextCursorOpenAt = lastProduct.getOpenAt();
+            nextCursorId = lastProduct.getProductId();
+        }
+
+        return new CursorPageResponse<>(contents, nextCursorId, nextCursorOpenAt);
     }
 
 }
