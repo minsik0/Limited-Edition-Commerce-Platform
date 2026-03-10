@@ -2,7 +2,9 @@ package com.sparta.productservice.api.controller;
 
 import com.sparta.multi_module.common.response.ApiResponse;
 import com.sparta.productservice.application.dto.request.ProductCreateRequest;
+import com.sparta.productservice.application.dto.request.ProductCursorRequest;
 import com.sparta.productservice.application.dto.request.ProductUpdateRequest;
+import com.sparta.productservice.application.dto.response.CursorPageResponse;
 import com.sparta.productservice.application.dto.response.ProductResponse;
 import com.sparta.productservice.application.dto.response.ProductStatusResponse;
 import com.sparta.productservice.application.dto.response.ProductSummaryResponse;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,6 +46,15 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductResponse>> get(@PathVariable UUID productId) {
         return ResponseEntity.ok(ApiResponse.success(productQueryService.get(productId)));
+    }
+
+    @GetMapping("/cursor")
+    public ResponseEntity<ApiResponse<CursorPageResponse<ProductSummaryResponse>>> getCursorPage(@PathVariable UUID cursorId,
+                                                                                                 @RequestParam int size,
+                                                                                                 @RequestParam LocalDateTime cursorOpenAt) {
+
+        ProductCursorRequest request = new ProductCursorRequest(cursorId, size, cursorOpenAt);
+        return ResponseEntity.ok(ApiResponse.success(productQueryService.getCursorPage(request)));
     }
 
     @PatchMapping("/{productId}")
