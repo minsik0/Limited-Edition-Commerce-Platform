@@ -30,7 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     where p.deletedAt is null 
     and(
         p.openAt < :cursorOpenAt
-        or (p.openAt = :cursorOpenAt and p.productId < cursorId)
+        or (p.openAt = :cursorOpenAt and p.productId < :cursorId)
         )
     order by p.openAt desc, p.productId desc 
     """)
