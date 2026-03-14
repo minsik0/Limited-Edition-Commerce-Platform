@@ -17,19 +17,26 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     Page<Product> findByDeletedAtIsNull(Pageable pageable);
 
     @Query("""
-        SELECT p
-        FROM Product p
-        WHERE p.deletedAt IS NULL 
-        AND (
-            :cursorOpenAt IS NULL 
-            OR p.openAt < :cursorOpenAt
-            OR (p.openAt = :cursorOpenAt AND p.productId < :cursorId)  
-            )
-            ORDER BY p.openAt DESC, p.productId DESC 
+    select p
+    from Product p
+    where p.deletedAt is null 
+    order by p.openAt desc, p.productId desc 
     """)
-    List<Product> findCursorPage(
-            @Param("cursorOpenAt")LocalDateTime cursorOpenAt,
-            @Param("cursorId")UUID cursorId,
-            Pageable pageable
-            );
+    List<Product> findFirstCursorPage(Pageable pageable);
+
+    @Query("""
+    select p
+    from Product p
+    where p.deletedAt is null 
+    and(
+        p.openAt < :cursorOpenAt
+        or (p.openAt = :cursorOpenAt and p.productId < :cursorId)
+        )
+    order by p.openAt desc, p.productId desc 
+    """)
+    List<Product> findNextCursorPage(
+            @Param("cursorId") UUID cursorId,
+            @Param("cursorOpenAt") LocalDateTime cursorOpenAt,
+            Pageable pageable);
+
 }
