@@ -56,16 +56,22 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request) {
 
-        Pageable pageable = PageRequest.of(0, request.getSize() + 1);
+        Pageable pageable = PageRequest.of(0, request.getSize());
 
-        List<Product> products = productRepository.findCursorPage(
-                request.getCursorOpenAt(),
-                request.getCursorId(),
-                pageable
-        );
+        List<Product> products;
 
-        boolean hasNext = products.size() > request.getSize();
-        List<Product> contentProducts = hasNext ? products.subList(0, request.getSize()) : products;
+        if (request.getCursorOpenAt() == null || request.getCursorId() == null) {
+
+            products = productRepository.findFirstCursorPage(pageable);
+
+        } else {
+
+            products = productRepository.findNextCursorPage(
+                    request.getCursorId(),
+                    request.getCursorOpenAt(),
+                    pageable
+            );
+        }
 
         List<ProductSummaryResponse> contents = products
                 .stream()
@@ -75,10 +81,10 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         LocalDateTime nextCursorOpenAt = null;
         UUID nextCursorId = null;
 
-        if (hasNext) {
-            Product lastProduct = contentProducts.get(contentProducts.size() - 1);
-            nextCursorOpenAt = lastProduct.getOpenAt();
-            nextCursorId = lastProduct.getProductId();
+        if (!products.isEmpty()) {
+            Product last = products.get(products.size() - 1);
+            nextCursorOpenAt = last.getOpenAt();
+            nextCursorId = last.getProductId();
         }
 
         return new CursorPageResponse<>(contents, nextCursorId, nextCursorOpenAt);

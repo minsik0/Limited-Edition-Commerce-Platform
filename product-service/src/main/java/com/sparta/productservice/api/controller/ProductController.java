@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @GetMapping("/cursor")
-    public ResponseEntity<ApiResponse<CursorPageResponse<ProductSummaryResponse>>> getCursorPage(@PathVariable UUID cursorId,
+    public ResponseEntity<ApiResponse<CursorPageResponse<ProductSummaryResponse>>> getCursorPage(@RequestParam(required = false) UUID cursorId,
                                                                                                  @RequestParam(defaultValue = "20") int size,
                                                                                                  @RequestParam(required = false) LocalDateTime cursorOpenAt) {
 
