@@ -56,7 +56,9 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request) {
 
-        Pageable pageable = PageRequest.of(0, request.getSize());
+        int size = request.getSize();
+
+        Pageable pageable = PageRequest.of(0, size + 1);
 
         List<Product> products;
 
@@ -73,6 +75,12 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             );
         }
 
+        boolean hasNext = products.size() > size;
+
+        if(hasNext) {
+            products.remove(size);
+        }
+
         List<ProductSummaryResponse> contents = products
                 .stream()
                 .map(ProductSummaryResponse::from)
@@ -87,7 +95,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             nextCursorId = last.getProductId();
         }
 
-        return new CursorPageResponse<>(contents, nextCursorId, nextCursorOpenAt);
+        return new CursorPageResponse<>(contents, hasNext, nextCursorId, nextCursorOpenAt);
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 public class CursorPageResponse <T>{
 
     private List<T> contents;
+    private boolean hasNext;
     private UUID nextCursorId;
     private LocalDateTime nextCursorOpenAt;
 }
