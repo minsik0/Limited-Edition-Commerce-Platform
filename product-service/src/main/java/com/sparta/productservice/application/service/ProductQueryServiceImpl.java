@@ -58,7 +58,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
         int size = request.getSize();
 
-        Pageable pageable = PageRequest.of(0, request.getSize());
+        Pageable pageable = PageRequest.of(0, size + 1);
 
         List<Product> products;
 
