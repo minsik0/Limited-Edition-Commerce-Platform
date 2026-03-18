@@ -26,7 +26,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory,
                                           @org.springframework.beans.factory.annotation.Qualifier("redisObjectMapper")
-                                            com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
+                                          com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
 
