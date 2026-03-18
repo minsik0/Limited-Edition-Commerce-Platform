@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@CacheEvict(value = "products", allEntries = true)
 public class ProductQueryServiceImpl implements ProductQueryService {
 
     private final ProductRepository productRepository;
