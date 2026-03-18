@@ -10,6 +10,8 @@ import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.infrastructure.persistence.ProductOptionRepository;
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@CacheEvict(value = "products", allEntries = true)
 public class ProductQueryServiceImpl implements ProductQueryService {
 
     private final ProductRepository productRepository;
@@ -54,6 +61,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     }
 
     @Override
+    @Cacheable( value = "products", key = "#cursorOpenAt + '_' + #cursorId + '_' + #size")
     public CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request) {
 
         int size = request.getSize();
