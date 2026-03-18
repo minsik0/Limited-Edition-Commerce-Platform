@@ -23,6 +23,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory();
     }
 
+    @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory,
                                           @org.springframework.beans.factory.annotation.Qualifier("redisObjectMapper")
                                             com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
