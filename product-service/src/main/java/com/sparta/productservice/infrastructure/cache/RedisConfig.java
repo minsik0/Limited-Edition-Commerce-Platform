@@ -24,7 +24,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory ConnectionFactory) {
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory,
+                                          @org.springframework.beans.factory.annotation.Qualifier("redisObjectMapper")
+                                          com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
 
@@ -32,7 +34,7 @@ public class RedisConfig {
 
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
 
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)))
 
                 .disableCachingNullValues();
 
