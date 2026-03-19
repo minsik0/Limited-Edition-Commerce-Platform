@@ -37,8 +37,7 @@ public class RedisConfig {
                 .disableCachingNullValues();
 
         // 2. RedisCacheManager 생성
-        return RedisCacheManager.RedisCacheManagerBuilder
-                .fromConnectionFactory(connectionFactory)
+        return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
                 .build();
     }
