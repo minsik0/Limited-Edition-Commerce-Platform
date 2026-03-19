@@ -1,5 +1,7 @@
 package com.sparta.productservice.infrastructure.cache;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,22 +27,19 @@ public class RedisConfig {
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory,
-                                          @org.springframework.beans.factory.annotation.Qualifier("redisObjectMapper")
-                                          com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
+                                          @Qualifier("redisObjectMapper") ObjectMapper objectMapper) {
 
+        // 1. 캐시 세부 설정
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-
                 .entryTtl(Duration.ofDays(7))
-
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)))
-
                 .disableCachingNullValues();
 
-        return RedisCacheManager.builder()
+        // 2. RedisCacheManager 생성
+        return RedisCacheManager.RedisCacheManagerBuilder
+                .fromConnectionFactory(connectionFactory)
                 .cacheDefaults(config)
                 .build();
-
     }
 }
