@@ -2,7 +2,7 @@
 CREATE TABLE products (
                           product_id UUID PRIMARY KEY,
                           name VARCHAR(255) NOT NULL,
-                          price INT NOT NULL,
+                          price BIGINT NOT NULL,
                           max_purchase_per_user INT NOT NULL,
                           status VARCHAR(50) NOT NULL,
                           open_at TIMESTAMP NOT NULL,
