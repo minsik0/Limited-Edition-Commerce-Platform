@@ -1,74 +1,11 @@
 version: "3.8"
 
 services:
-
-  user-service:
-    build: ./user-service
-    container_name: user-service
-    ports:
-      - "19010:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/platform
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-    depends_on:
-      - db
-
-  product-service:
-    build: ./product-service
-    container_name: product-service
-    ports:
-      - "19020:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/platform
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-    depends_on:
-      - db
-      - redis
-
-  order-service:
-    build: ./order-service
-    container_name: order-service
-    ports:
-      - "19030:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/platform
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      PRODUCT_SERVICE_URL: http://product-service:8080
-      USER_SERVICE_URL: http://user-service:8080
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-    depends_on:
-      - db
-
-  payment-service:
-    build: ./payment-service
-    container_name: payment-service
-    ports:
-      - "19040:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/platform
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      ORDER_SERVICE_URL: http://order-service:8080
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-    depends_on:
-      - db
-
   redis:
     image: redis:7
     container_name: redis
     ports:
-      - "6379:6379"
+      - "6381:6379"
 
   db:
     image: postgres:15
@@ -76,6 +13,6 @@ services:
     environment:
       POSTGRES_DB: platform
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5434:5432"
