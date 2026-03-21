@@ -13,6 +13,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    clean-disabled: false
     locations: classpath:db/migration
 
 jwt:
@@ -22,4 +23,4 @@ jwt:
 
 product:
   service:
-    url: ${PRODUCT_SERVICE_URL:http://localhost:19020}
+    url: ${PRODUCT_SERVICE_URL:http://product-service:8080}
