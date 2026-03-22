@@ -12,8 +12,6 @@ CREATE TABLE payments (
                           deleted_at TIMESTAMP
 );
 
-CREATE INDEX idx_payments_user_id ON payments (user_id);
-
 CREATE INDEX idx_payments_user_deleted
     ON payments (user_id, deleted_at);
 

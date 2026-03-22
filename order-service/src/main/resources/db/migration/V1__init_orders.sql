@@ -23,8 +23,6 @@ CREATE TABLE order_items (
                                  FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
-CREATE INDEX idx_orders_user_id ON orders (user_id);
-
 CREATE INDEX idx_orders_user_status
     ON orders (user_id, status);
 
