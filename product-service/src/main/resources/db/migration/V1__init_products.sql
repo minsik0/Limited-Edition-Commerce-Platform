@@ -21,3 +21,12 @@ CREATE TABLE product_options (
                                  CONSTRAINT fk_product_options_product
                                      FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
+
+-- products
+CREATE INDEX idx_products_cursor
+    ON products (open_at DESC, product_id DESC)
+    WHERE deleted_at IS NULL;
+
+-- product_options
+CREATE INDEX idx_product_options_product_stock
+    ON product_options (product_id, remain_stock);
