@@ -3,7 +3,7 @@ CREATE TABLE orders (
                         order_id UUID PRIMARY KEY,
                         user_id UUID NOT NULL,
                         status VARCHAR(50) NOT NULL,
-                        total_price BIGINT NOT NULL,
+                        total_price INT NOT NULL,
                         created_at TIMESTAMP,
                         updated_at TIMESTAMP,
                         deleted_at TIMESTAMP
@@ -17,7 +17,7 @@ CREATE TABLE order_items (
                              product_name VARCHAR(255) NOT NULL,
                              option_id UUID NOT NULL,
                              option_name VARCHAR(255) NOT NULL,
-                             price BIGINT NOT NULL,
+                             price INT NOT NULL,
                              quantity INT NOT NULL,
                              CONSTRAINT fk_order_items_order
                                  FOREIGN KEY (order_id) REFERENCES orders(order_id)
