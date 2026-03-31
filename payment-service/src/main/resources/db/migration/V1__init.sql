@@ -1,4 +1,5 @@
--- payments
+CREATE DATABASE payment_db;
+
 CREATE TABLE payments (
                           payment_id UUID PRIMARY KEY,
                           order_id UUID NOT NULL UNIQUE,
