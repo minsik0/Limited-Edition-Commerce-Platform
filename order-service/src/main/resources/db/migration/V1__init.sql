@@ -1,4 +1,5 @@
--- orders
+CREATE DATABASE order_db;
+
 CREATE TABLE orders (
                         order_id UUID PRIMARY KEY,
                         user_id UUID NOT NULL,
@@ -9,7 +10,6 @@ CREATE TABLE orders (
                         deleted_at TIMESTAMP
 );
 
--- order_items
 CREATE TABLE order_items (
                              order_item_id UUID PRIMARY KEY,
                              order_id UUID NOT NULL,
@@ -28,3 +28,4 @@ CREATE INDEX idx_orders_user_status
 
 CREATE INDEX idx_orders_user_created
     ON orders (user_id, created_at);
+

@@ -5,14 +5,15 @@ services:
     image: redis:7
     container_name: redis
     ports:
-      - "6381:6379"
+      - "6379:6379"
 
-  db:
+  postgres:
     image: postgres:15
     container_name: postgres
     environment:
-      POSTGRES_DB: platform
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5434:5432"
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
