@@ -1,5 +1,3 @@
-CREATE DATABASE order_db;
-
 CREATE TABLE orders (
                         order_id UUID PRIMARY KEY,
                         user_id UUID NOT NULL,
