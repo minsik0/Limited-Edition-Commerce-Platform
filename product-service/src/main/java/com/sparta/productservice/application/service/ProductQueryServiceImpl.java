@@ -61,7 +61,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     @Cacheable(value = "products", key = "#request.cursorOpenAt + '_' + #request.cursorId + '_' + #request.size")
-    public CursorPageResponse getCursorPage(ProductCursorRequest request) {
+    public CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request) {
 
         int size = request.getSize();
 
@@ -102,7 +102,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             nextCursorId = last.getProductId();
         }
 
-        return new CursorPageResponse(contents, hasNext, nextCursorId, nextCursorOpenAt);
+        return new CursorPageResponse<>(contents, hasNext, nextCursorId, nextCursorOpenAt);
     }
 
 }
