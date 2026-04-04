@@ -4,11 +4,13 @@ import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.domain.product.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ProductSummaryResponse {
 
