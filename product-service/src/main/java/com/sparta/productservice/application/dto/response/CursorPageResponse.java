@@ -11,9 +11,9 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CursorPageResponse {
+public class CursorPageResponse <T>{
 
-    private List<ProductSummaryResponse> contents;
+    private List<T> contents;
     private boolean hasNext;
     private UUID nextCursorId;
     private LocalDateTime nextCursorOpenAt;
