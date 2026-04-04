@@ -50,7 +50,7 @@ public class ProductController {
     }
 
     @GetMapping("/cursor")
-    public ResponseEntity<ApiResponse<CursorPageResponse<ProductSummaryResponse>>> getCursorPage(@RequestParam(required = false) UUID cursorId,
+    public ResponseEntity<ApiResponse<CursorPageResponse>> getCursorPage(@RequestParam(required = false) UUID cursorId,
                                                                                                  @RequestParam(defaultValue = "20") int size,
                                                                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                                                      LocalDateTime cursorOpenAt) {

@@ -16,5 +16,5 @@ public interface ProductQueryService {
 
     ProductResponse get(UUID productId);
 
-    CursorPageResponse<ProductSummaryResponse> getCursorPage(ProductCursorRequest request);
+    CursorPageResponse getCursorPage(ProductCursorRequest request);
 }
