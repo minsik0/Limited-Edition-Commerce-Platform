@@ -22,7 +22,9 @@ public class RedisObjectMapperConfig {
 
 
         PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-                .allowIfBaseType("com.sparta.")
+                .allowIfBaseType(Object.class)
+                .allowIfSubType("java.util.")
+                .allowIfSubType("com.sparta.")
                 .build();
 
         mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
