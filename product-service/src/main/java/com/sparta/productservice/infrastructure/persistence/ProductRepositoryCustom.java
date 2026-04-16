@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface ProductRepositoryCustom {
 
     List<Product> findFirstCursorPage(int size);
-    List<Product> findNextCursorPage(UUID corsorId, LocalDateTime cursorOpenAt, int size);
+    List<Product> findNextCursorPage(UUID cursorId, LocalDateTime cursorOpenAt, int size);
 }

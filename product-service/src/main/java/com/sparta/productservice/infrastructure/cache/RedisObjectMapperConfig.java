@@ -22,7 +22,6 @@ public class RedisObjectMapperConfig {
 
 
         PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-                .allowIfBaseType(Object.class)
                 .allowIfSubType("java.util.")
                 .allowIfSubType("com.sparta.")
                 .build();
