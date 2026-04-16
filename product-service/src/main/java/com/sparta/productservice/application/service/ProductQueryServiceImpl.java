@@ -65,20 +65,18 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
         int size = request.getSize();
 
-        Pageable pageable = PageRequest.of(0, size + 1);
-
         List<Product> products;
 
         if (request.getCursorOpenAt() == null || request.getCursorId() == null) {
 
-            products = productRepository.findFirstCursorPage(pageable);
+            products = productRepository.findFirstCursorPage(size + 1);
 
         } else {
 
             products = productRepository.findNextCursorPage(
                     request.getCursorId(),
                     request.getCursorOpenAt(),
-                    pageable
+                    size + 1
             );
         }
 
@@ -91,7 +89,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         List<ProductSummaryResponse> contents = products
                 .stream()
                 .map(ProductSummaryResponse::from)
-                .toList();
+                .collect(Collectors.toList());
 
         LocalDateTime nextCursorOpenAt = null;
         UUID nextCursorId = null;
