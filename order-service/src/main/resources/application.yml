@@ -25,3 +25,9 @@ jwt:
 product:
   service:
     url: ${PRODUCT_SERVICE_URL:http://product-service:8080}
+
+kafka:
+  bootstrap-servers: localhost:9092
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
