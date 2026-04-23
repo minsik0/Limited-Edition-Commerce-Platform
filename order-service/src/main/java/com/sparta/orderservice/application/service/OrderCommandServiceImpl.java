@@ -9,6 +9,7 @@ import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import com.sparta.orderservice.infrastructure.client.ProductClient;
+import com.sparta.orderservice.infrastructure.kafka.producer.StockEventProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class OrderCommandServiceImpl implements OrderCommandService {
 
     private final OrderRepository orderRepository;
+    private final StockEventProducer stockEventProducer;
     private final ProductClient productClient;
 
     @Override
