@@ -1,5 +1,6 @@
 package com.sparta.orderservice.application.service;
 
+import com.sparta.multi_module.common.Event.StockDecreaseEvent;
 import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.orderservice.application.dto.request.CreateOrderRequest;
@@ -7,6 +8,7 @@ import com.sparta.orderservice.application.dto.response.CreateOrderResponse;
 import com.sparta.orderservice.application.dto.response.ProductOptionForOrderResponse;
 import com.sparta.orderservice.domain.order.OrderItem;
 import com.sparta.orderservice.domain.order.Order;
+import com.sparta.orderservice.domain.order.OrderStatus;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import com.sparta.orderservice.infrastructure.client.ProductClient;
 import com.sparta.orderservice.infrastructure.kafka.producer.StockEventProducer;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +34,6 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         ProductOptionForOrderResponse product = productClient
                 .getProductOption(request.getProductId(),request.getOptionId());
 
-        //재고 차감
-        productClient.deductStock(
-                request.getProductId(),
-                request.getOptionId(),
-                request.getQuantity()
-        );
         //Item 생성
         OrderItem item = OrderItem.builder()
                 .productId(product.getProductId())
@@ -49,11 +46,22 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         Order order = Order.builder()
                 .userId(userId)
+                .status(OrderStatus.PENDING)
                 .build();
 
         order.addItem(item);
 
         Order savedOrder = orderRepository.save(order);
+
+        //재고 차감
+        StockDecreaseEvent event = StockDecreaseEvent.of(
+                savedOrder.getOrderId(),
+                request.getProductId(),
+                request.getOptionId(),
+                request.getQuantity()
+        );
+
+        stockEventProducer.send(event);
 
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }
