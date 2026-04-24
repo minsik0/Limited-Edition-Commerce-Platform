@@ -1,7 +1,7 @@
 package com.sparta.orderservice.infrastructure.kafka.producer;
 
-import com.sparta.multi_module.common.Event.StockDecreaseEvent;
 import lombok.RequiredArgsConstructor;
+import com.sparta.multi_module.common.Event.*;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

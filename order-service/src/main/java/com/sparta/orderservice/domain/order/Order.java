@@ -42,9 +42,9 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     @Builder
-    private Order(UUID userId) {
+    private Order(UUID userId, OrderStatus status) {
         this.userId = userId;
-        this.status = OrderStatus.CREATED;
+        this.status = (status != null) ? status : OrderStatus.CREATED;
         this.totalPrice = 0;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
