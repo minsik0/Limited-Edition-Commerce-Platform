@@ -35,16 +35,6 @@ spring:
   cache:
     type: redis
 
-jwt:
-  secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration-ms: 360000000
-  issuer: limited-edition-commerce-platform
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.orm.jdbc.bind: trace
-
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -57,3 +47,13 @@ logging:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-ms: 360000000
+  issuer: limited-edition-commerce-platform
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
