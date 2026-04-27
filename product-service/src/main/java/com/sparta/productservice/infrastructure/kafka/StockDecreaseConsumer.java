@@ -2,7 +2,7 @@ package com.sparta.productservice.infrastructure.kafka;
 
 import com.sparta.multi_module.common.Event.StockDecreaseEvent;
 import com.sparta.multi_module.common.Event.StockResultEvent;
-import com.sparta.productservice.application.service.ProductOptionServiceImpl;
+import  com.sparta.productservice.application.service.ProductOptionService ;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StockDecreaseConsumer {
 
-    private final ProductOptionServiceImpl productOptionService;
+    private  final  ProductOptionService  productOptionService ;
     private final ProcessedEventRepository processedEventRepository;
     private final StockResultProducer stockResultProducer;
 
-    @KafkaListener(topics = "stock-decrese", groupId = "stock-group")
+    @KafkaListener(topics = "stock-decrease", groupId = "stock-group")
     public void stockDecreaseConsumer(StockDecreaseEvent event) {
 
         if (processedEventRepository.existsById(event.getEventId())) {
