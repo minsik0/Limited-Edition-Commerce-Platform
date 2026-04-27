@@ -6,38 +6,33 @@ import  com.sparta.productservice.application.service.ProductOptionService ;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
 @RequiredArgsConstructor
 public class StockDecreaseConsumer {
 
-    private  final  ProductOptionService  productOptionService ;
-    private final ProcessedEventRepository processedEventRepository;
+    private final StockProcessService stockProcessService;
     private final StockResultProducer stockResultProducer;
 
     @KafkaListener(topics = "stock-decrease", groupId = "stock-group")
-    public void stockDecreaseConsumer(StockDecreaseEvent event) {
+    public void consume(StockDecreaseEvent event) {
 
-        if (processedEventRepository.existsById(event.getEventId())) {
-            return;
+        boolean success = stockProcessService.process(event);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                stockResultProducer.send(
+                        new StockResultEvent(
+                                event.getEventId(),
+                                event.getOrderId(),
+                                success
+                        )
+                );
+            }
         }
-
-        boolean success = true;
-
-        try {
-            productOptionService.decreaseStockAtomic(
-                    event.getProductId(),
-                    event.getOptionId(),
-                    event.getQuantity()
-            );
-        } catch (Exception e) {
-            success = false;
-        }
-
-        stockResultProducer.send(
-                new StockResultEvent(event.getEventId(), event.getOrderId(), success)
         );
-
-        processedEventRepository.save(new ProcessedEvent(event.getEventId()));
     }
 }
