@@ -76,4 +76,26 @@ public class Order {
         this.status = OrderStatus.PAID;
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void confirm() {
+        if (this.status == OrderStatus.CREATED) {
+            return;
+        }
+        if (this.status != OrderStatus.PENDING) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
+        }
+        this.status = OrderStatus.CREATED;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void fail() {
+        if (this.status == OrderStatus.FAILED) {
+            return;
+        }
+        if (this.status != OrderStatus.PENDING) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
+        }
+        this.status = OrderStatus.FAILED;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
