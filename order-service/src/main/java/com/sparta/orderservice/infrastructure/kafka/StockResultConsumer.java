@@ -1,4 +1,4 @@
-package com.sparta.orderservice.infrastructure.kafka.producer;
+package com.sparta.orderservice.infrastructure.kafka;
 
 import com.sparta.multi_module.common.Event.StockResultEvent;
 import lombok.RequiredArgsConstructor;

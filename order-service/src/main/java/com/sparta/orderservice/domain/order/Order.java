@@ -78,6 +78,9 @@ public class Order {
     }
 
     public void confirm() {
+        if (this.status == OrderStatus.CREATED) {
+            return;
+        }
         if (this.status != OrderStatus.PENDING) {
             throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
         }
@@ -86,7 +89,10 @@ public class Order {
     }
 
     public void fail() {
-        if (this.status != OrderStatus.FAILED) {
+        if (this.status == OrderStatus.FAILED) {
+            return;
+        }
+        if (this.status != OrderStatus.PENDING) {
             throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
         }
         this.status = OrderStatus.FAILED;

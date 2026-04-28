@@ -11,7 +11,7 @@ import com.sparta.orderservice.domain.order.Order;
 import com.sparta.orderservice.domain.order.OrderStatus;
 import com.sparta.orderservice.infrastructure.OrderRepository;
 import com.sparta.orderservice.infrastructure.client.ProductClient;
-import com.sparta.orderservice.infrastructure.kafka.producer.StockEventProducer;
+import com.sparta.orderservice.infrastructure.kafka.StockEventProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
