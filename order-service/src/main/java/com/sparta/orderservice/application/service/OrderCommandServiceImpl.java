@@ -26,7 +26,6 @@ import java.util.UUID;
 public class OrderCommandServiceImpl implements OrderCommandService {
 
     private final OrderRepository orderRepository;
-    private final StockEventProducer stockEventProducer;
     private final ProductClient productClient;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -55,7 +54,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         Order savedOrder = orderRepository.save(order);
 
+        StockDecreaseEvent event = StockDecreaseEvent.of(
+                savedOrder.getOrderId(),
+                request.getProductId(),
+                request.getOptionId(),
+                request.getQuantity()
+        );
 
+        eventPublisher.publishEvent(event);
 
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }
