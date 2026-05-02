@@ -13,6 +13,7 @@ import com.sparta.orderservice.infrastructure.OrderRepository;
 import com.sparta.orderservice.infrastructure.client.ProductClient;
 import com.sparta.orderservice.infrastructure.kafka.StockEventProducer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private final OrderRepository orderRepository;
     private final StockEventProducer stockEventProducer;
     private final ProductClient productClient;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public CreateOrderResponse create(UUID userId, CreateOrderRequest request) {
@@ -53,15 +55,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
         Order savedOrder = orderRepository.save(order);
 
-        //재고 차감
-        StockDecreaseEvent event = StockDecreaseEvent.of(
-                savedOrder.getOrderId(),
-                request.getProductId(),
-                request.getOptionId(),
-                request.getQuantity()
-        );
 
-        stockEventProducer.send(event);
 
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }

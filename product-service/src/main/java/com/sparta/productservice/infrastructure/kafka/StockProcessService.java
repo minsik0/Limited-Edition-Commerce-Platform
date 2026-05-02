@@ -23,6 +23,13 @@ public class StockProcessService {
     public void process(StockDecreaseEvent event) {
 
         if (processedEventRepository.existsById(event.getEventId())) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    stockResultProducer.send(new StockResultEvent(event.getEventId(), event.getOrderId(), true));
+                }
+            });
+
             return;
         }
 
