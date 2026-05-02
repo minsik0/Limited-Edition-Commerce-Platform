@@ -85,13 +85,11 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Override
     @Transactional
-    public void decreaseStockAtomic(UUID productId, UUID optionId, int quantity) {
+    public boolean decreaseStockAtomic(UUID productId, UUID optionId, int quantity) {
 
         int updated = productOptionRepository.decreaseStockAtomic(optionId, productId, quantity);
 
-        if (updated == 0) {
-            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
-        }
+        return updated > 0;
     }
 
     private ProductOption findOption(UUID optionId) {
