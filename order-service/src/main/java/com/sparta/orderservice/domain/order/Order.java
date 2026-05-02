@@ -57,7 +57,7 @@ public class Order {
     }
 
     public void cancel() {
-        if (!status.isCancelable()) {
+        if (this.status != OrderStatus.CREATED && this.status != OrderStatus.PENDING) {
             throw new BusinessException(ErrorCode.ORDER_CANNOT_CANCEL);
         }
         this.status = OrderStatus.CANCELED;
