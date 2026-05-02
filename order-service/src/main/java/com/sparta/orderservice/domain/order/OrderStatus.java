@@ -1,13 +1,13 @@
 package com.sparta.orderservice.domain.order;
 
 public enum OrderStatus {
-    CREATED,    // 주문 생성 직후 (결제 전)
+    PENDING,    // 주문 접수, 재고 차감 대기
+    CREATED,    // 재고 확보 완료, 주문 확정
     PAID,       // 결제 완료
     CANCELED,   // 주문 취소
-    PENDING,   // 재고 차감 대기 (Kafka 처리 전)
-    FAILED;     // 실패
+    FAILED;     // 재고 차감 실패
 
     public boolean isCancelable() {
-        return this == CREATED;
+        return this == PENDING || this == CREATED;
     }
 }
