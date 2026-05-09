@@ -63,7 +63,8 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 ---
 
 ## 3. 시스템 아키텍처
-*(여기에 아키텍처 다이어그램 이미지를 업로드 후 링크하세요)*
+*![대체텍스트](./images/Architecture.png)*
+
 > **Gateway를 통한 라우팅 및 Kafka 기반의 비동기 이벤트를 활용한 서비스 간 결합도 해소**
 
 ---
