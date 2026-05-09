@@ -50,7 +50,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 
 ● Redis (Cache)
 
-● Apache Kafka (Messa ging)
+● Apache Kafka (Messaging)
 
 | 분류 | 기술 | 선정 이유 |
 | :--- | :--- | :--- |
@@ -135,7 +135,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 
 ## 6. 주요 특징 (Key Features)
 
-●**MSA 통신:** OpenFeign을 활용한 선언적 HTTP 통신 및 로드밸런싱 적용.
+● **MSA 통신:** OpenFeign을 활용한 선언적 HTTP 통신 및 로드밸런싱 적용.
 
 ● **분산 환경 대응:** Kafka 환경을 고려한 멱등성 및 이벤트 발행 보장 설계.
 
