@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: payment-service
   datasource:
     url: ${PAYMENT_DB_URL}
     username: postgres

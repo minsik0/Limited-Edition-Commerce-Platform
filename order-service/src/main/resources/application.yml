@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: order-service
   datasource:
     url: ${ORDER_DB_URL}
     username: postgres
