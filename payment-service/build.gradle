@@ -26,14 +26,16 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
 	implementation 'org.flywaydb:flyway-core'
 
 	// DB
 	runtimeOnly 'org.postgresql:postgresql'
 
 	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.4'
-
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
