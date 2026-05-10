@@ -114,7 +114,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 ## 5. 기술적 의사결정
 
 ### 멱등성 및 정합성 보장
-● **배경:** 배경: Kafka의 At Least Once 전달 정책 특성상 네트워크 재시도 등으로 인해 동일 메시지가 중복 소비될 가능성이 존재.
+● **배경:** Kafka의 At Least Once 전달 정책 특성상 네트워크 재시도 등으로 인해 동일 메시지가 중복 소비될 가능성이 존재.
 
 ● **해결:** `processed_event` 테이블을 생성하여 소비된 `event_id(UUID)`를 관리.
 
