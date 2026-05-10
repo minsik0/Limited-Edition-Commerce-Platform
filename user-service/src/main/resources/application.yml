@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: user-service
   datasource:
     url: ${USER_DB_URL}
     username: postgres
