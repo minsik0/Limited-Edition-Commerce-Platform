@@ -37,6 +37,6 @@ jwt:
   access-token-expiration-ms: 360000000
   issuer: limited-edition-commerce-platform
 
-product:
-  service:
-    url: ${PRODUCT_SERVICE_URL:http://localhost:19020}
+#product:
+#  service:
+#    url: ${PRODUCT_SERVICE_URL:http://localhost:19020}
