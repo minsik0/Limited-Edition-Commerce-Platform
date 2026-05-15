@@ -1,4 +1,4 @@
-package com.sparta.gateway;
+package com.sparta.gateway.security;
 
 import com.sparta.multi_module.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,20 @@ public class JwtAuthenticationWebFilter implements WebFilter {
 
         String path =  exchange.getRequest().getURI().getPath();
 
-        if(path.startsWith("/internal/")) {
+        if (path.startsWith("/internal/")) {
+
+            String internalCallHeader = exchange.getRequest()
+                            .getHeaders()
+                            .getFirst("X-Internal-Call");
+
+            if (!"true".equals(internalCallHeader)) {
+
+                exchange.getResponse()
+                        .setStatusCode(HttpStatus.FORBIDDEN);
+
+                return exchange.getResponse().setComplete();
+            }
+
             return chain.filter(exchange);
         }
 
