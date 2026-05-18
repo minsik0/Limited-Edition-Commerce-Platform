@@ -11,7 +11,7 @@ spring:
         - id: product-service
           uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/api/products/**
+            - Path=/products/**
           filters:
             - name: RequestRateLimiter
               args:
@@ -21,17 +21,17 @@ spring:
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
-            - Path=/api/orders/**
+            - Path=/orders/**
 
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/users/**
+            - Path=/users/**
 
         - id: payment-service
           uri: lb://PAYMENT-SERVICE
           predicates:
-            - Path=/api/payments/**
+            - Path=/payments/**
 
 eureka:
   client:
@@ -42,3 +42,10 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-ms: 360000000
   issuer: limited-edition-commerce-platform
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.netty: DEBUG

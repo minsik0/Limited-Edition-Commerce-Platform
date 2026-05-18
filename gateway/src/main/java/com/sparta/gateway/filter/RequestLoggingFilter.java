@@ -7,19 +7,42 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Component
 @Slf4j
 public class RequestLoggingFilter implements GlobalFilter {
 
+    private static final String TRACE_ID = "X-Trace-Id";
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
+        String traceId = UUID.randomUUID().toString();
+
         String method = String.valueOf(exchange.getRequest().getMethod());
 
-        String path = exchange.getRequest().getURI().getPath();
+        long start = System.currentTimeMillis();
 
-        log.info("[Gateway Request] {} {}", method, path);
+        String path = exchange.getRequest()
+                        .getURI()
+                        .getPath();
 
-        return chain.filter(exchange);
+        log.info("[TRACE_ID={}] {} {}", traceId, method, path);
+
+        return chain.filter(exchange.mutate().request(exchange
+                                .getRequest()
+                                .mutate()
+                                .header(TRACE_ID, traceId)
+                                .build()
+                        )
+                        .build()
+        ).doFinally(signalType -> {
+
+            long duration = System.currentTimeMillis() - start;
+
+            log.info("[TRACE_ID={}] {} {} END {}ms", traceId, method, path, duration
+            );
+        });
     }
 }
