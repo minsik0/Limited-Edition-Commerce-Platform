@@ -17,21 +17,12 @@ public class LoggingFilter implements GlobalFilter {
     private static final String TRACE_ID = "X-Trace-Id";
 
     @Override
-    public Mono<Void> filter(
-            ServerWebExchange exchange,
-            GatewayFilterChain chain
-    ) {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        String traceId = exchange.getRequest()
-                .getHeaders()
-                .getFirst(TRACE_ID);
+        String requestTraceId = exchange.getRequest().getHeaders().getFirst(TRACE_ID);
 
-        if (traceId == null) {
-            traceId = UUID.randomUUID().toString();
-        }
-
-        final String finalTraceId = traceId;
-        final long start = System.currentTimeMillis();
+        final String traceId = (requestTraceId != null) ? requestTraceId : UUID.randomUUID().toString();
+        final long start = System.nanoTime();
 
         ServerHttpRequest mutatedRequest = exchange.getRequest()
                 .mutate()
@@ -43,32 +34,17 @@ public class LoggingFilter implements GlobalFilter {
                 .request(mutatedRequest)
                 .build();
 
-        String method =
-                String.valueOf(mutatedRequest.getMethod());
+        String method = String.valueOf(mutatedRequest.getMethod());
 
-        String path =
-                mutatedRequest.getURI().getPath();
+        String path = mutatedRequest.getURI().getPath();
 
-        log.info(
-                "[TRACE_ID={}] {} {} START",
-                traceId,
-                method,
-                path
-        );
+        log.info("[TRACE_ID={}] {} {} START", traceId, method, path);
 
         return chain.filter(mutatedExchange)
                 .doFinally(signalType -> {
 
-                    long duration =
-                            System.currentTimeMillis() - start;
-
-                    log.info(
-                            "[TRACE_ID={}] {} {} END {}ms",
-                            finalTraceId,
-                            method,
-                            path,
-                            duration
-                    );
+                    long duration = (System.nanoTime() - start) / 1_000_000;
+                    log.info("[TRACE_ID={}] {} {} END {}ms", traceId, method, path, duration);
                 });
     }
 }
