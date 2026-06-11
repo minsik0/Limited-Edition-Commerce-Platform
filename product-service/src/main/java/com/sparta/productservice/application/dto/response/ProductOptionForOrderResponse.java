@@ -13,12 +13,11 @@ public class ProductOptionForOrderResponse {
 
     private UUID productId;
     private String productName;
-
     private UUID optionId;
     private String optionName;
-
     private int price;
     private int remainStock;
+    private int maxPurchasePerUser;
 
     public static ProductOptionForOrderResponse from(Product product, ProductOption option) {
         return new ProductOptionForOrderResponse(
@@ -27,7 +26,8 @@ public class ProductOptionForOrderResponse {
                 option.getOptionId(),
                 option.getSize() + " / " + option.getColor(),
                 product.getPrice(),
-                option.getRemainStock()
+                option.getRemainStock(),
+                product.getMaxPurchasePerUser()
         );
     }
 }

@@ -19,10 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +40,6 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "openAt")
         );
-        System.out.println("정렬 적용된 getPage 실행됨");
         return productRepository.findByDeletedAtIsNull(sortPageable)
                 .map(ProductSummaryResponse::from);
     }
