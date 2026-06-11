@@ -35,6 +35,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         ProductOptionForOrderResponse product = productClient
                 .getProductOption(request.getProductId(),request.getOptionId());
 
+        // 구매 한도 검증
+        int alreadyOrdered = orderRepository.countByUserIdAndProductId(
+                userId, request.getProductId()
+        );
+        if (alreadyOrdered + request.getQuantity() > product.getMaxPurchasePerUser()) {
+            throw new BusinessException(ErrorCode.ORDER_NOT_FOUND);
+        }
+
         //Item 생성
         OrderItem item = OrderItem.builder()
                 .productId(product.getProductId())

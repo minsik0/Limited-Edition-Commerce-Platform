@@ -21,7 +21,9 @@ public class LoggingFilter implements GlobalFilter {
 
         String requestTraceId = exchange.getRequest().getHeaders().getFirst(TRACE_ID);
 
-        final String traceId = (requestTraceId != null) ? requestTraceId : UUID.randomUUID().toString();
+        final  String  traceId = ( requestTraceId != null && ! requestTraceId.isBlank ( ) ) ?
+                requestTraceId : UUID.randomUUID ( ). toString ( );
+
         final long start = System.nanoTime();
 
         ServerHttpRequest mutatedRequest = exchange.getRequest()

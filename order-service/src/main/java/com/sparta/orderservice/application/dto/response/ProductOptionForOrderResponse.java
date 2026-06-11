@@ -19,4 +19,5 @@ public class ProductOptionForOrderResponse {
 
     private int price;
     private int remainStock;
+    private int maxPurchasePerUser;
 }
