@@ -19,23 +19,33 @@ class IdempotencyTest {
 
     @Autowired StockProcessService stockProcessService;
     @Autowired ProductOptionRepository productOptionRepository;
+    @Autowired jakarta.persistence.EntityManager em;
 
     @Test
     void 동일_이벤트_중복_처리시_재고_한번만_차감() {
         // given: 재고 10개 옵션
+
+        com.sparta.productservice.domain.product.Product product = com.sparta.productservice.domain.product.Product.builder()
+                .build();
+        em.persist(product);
+        ProductOption option = ProductOption.builder()
+                .product(product)
+                .size("M")
+                .color("Black")
+                .remainStock(10)
+                .build();
+        em.persist(option);
         UUID eventId = UUID.randomUUID();
-        UUID productId = UUID.randomUUID();
-        UUID optionId = UUID.randomUUID();
         UUID orderId = UUID.randomUUID();
 
-        StockDecreaseEvent event = new StockDecreaseEvent(eventId, orderId, productId, optionId, 1);
+        StockDecreaseEvent event = new StockDecreaseEvent(eventId, orderId, product.getProductId(), option.getOptionId(), 1);
 
         // when: 같은 이벤트 2번 처리
         stockProcessService.process(event);
         stockProcessService.process(event);
 
         // then: 재고 9개 (1번만 차감)
-        ProductOption option = productOptionRepository.findById(optionId).get();
-        assertThat(option.getRemainStock()).isEqualTo(9);
+        ProductOption savedOption = productOptionRepository.findById(option.getOptionId()).get();
+        assertThat(savedOption.getRemainStock()).isEqualTo(9);
     }
 }
