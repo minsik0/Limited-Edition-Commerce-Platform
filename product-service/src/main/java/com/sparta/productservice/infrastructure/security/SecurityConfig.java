@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("MASTER")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("MASTER")
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
