@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -56,7 +57,7 @@ public class UserController {
     @Operation(summary = "전체 사용자 목록 조회", description = "ADMIN 권한 필요. 페이지네이션 지원")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<Page<UserListResponse>> getUsers(@PageableDefault(size = 30) Pageable pageable) {
+    public ResponseEntity<Page<UserListResponse>> getUsers(@ParameterObject @PageableDefault(size = 30) Pageable pageable) {
         return ResponseEntity.ok(userService.getUsers(pageable));
     }
 

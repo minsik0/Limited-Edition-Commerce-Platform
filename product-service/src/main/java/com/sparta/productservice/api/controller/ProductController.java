@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,7 +51,7 @@ public class ProductController {
 
     @Operation(summary = "상품 목록 조회 (Offset 페이징)", description = "Spring Data Pageable 기반 목록 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ProductSummaryResponse>>> getPage(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<ProductSummaryResponse>>> getPage(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.success(productQueryService.getPage(pageable)));
     }
 
