@@ -25,6 +25,7 @@ public class SecurityConfig {
         return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/internal/**").permitAll()
+                        .pathMatchers("/actuator/prometheus", "/actuator/health").permitAll()
                         .anyExchange().permitAll()
                 )
                 .exceptionHandling(exception -> exception

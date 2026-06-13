@@ -24,6 +24,9 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.4'
 	implementation 'org.springframework.boot:spring-boot-starter-security'

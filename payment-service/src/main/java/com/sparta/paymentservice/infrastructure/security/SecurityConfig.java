@@ -31,6 +31,7 @@ public class SecurityConfig {
                         // 내부 서비스 간 호출 허용
                         .requestMatchers("/internal/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/actuator/prometheus", "/actuator/health").permitAll()
 
                         // 그 외는 전부 인증 필요
                         .anyRequest().authenticated()
