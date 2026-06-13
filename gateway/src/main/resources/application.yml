@@ -38,6 +38,15 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  metrics:
+    tags:
+      application: gateway
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-ms: 360000000
