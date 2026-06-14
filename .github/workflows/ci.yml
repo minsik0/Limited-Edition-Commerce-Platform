@@ -154,14 +154,13 @@ jobs:
           # --- JWT (테스트용 시크릿, 32자 이상) ---
           JWT_SECRET_KEY: ci-test-jwt-secret-key-for-github-actions-must-be-long-enough
 
-          # --- Kafka 비활성화 ---
-          # CI에서 Kafka 컨테이너를 띄우지 않으므로,
-          # Kafka 관련 자동설정을 제외하여 빌드 실패를 방지합니다.
-          SPRING_AUTOCONFIGURE_EXCLUDE: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
-
           # --- Eureka 비활성화 ---
           # CI에서 Eureka 서버가 없으므로 클라이언트 등록을 끕니다.
           EUREKA_CLIENT_ENABLED: false
+
+          SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+          SPRING_KAFKA_LISTENER_AUTO_STARTUP: false
+
 
       # 7) 테스트 결과 리포트 업로드 (선택사항이지만 추천)
       # -----------------------------------------------------------------------
