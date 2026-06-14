@@ -160,7 +160,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 
 ● **해결:** `DefaultErrorHandler`를 활용하여 1초 간격 최대 3회 재시도 후 실패 시 DLQ 토픽(`*.DLT`)으로 전송.
 
-● **세부 전략:** `BusinessException`(재고 부족, 주문 미존재 등)은 재시도해도 결과가 동일하므로 `addNotRetryableExceptions`로 등록하여 즉시 DLQ 전송. 네트워크 타임아웃 등 일시적 장애만 재시도 대상으로 분류.
+● **세부 전략:** `BusinessException`(주문 미존재, 존재하지 않는 상품 등)은 재시도해도 결과가 동일하므로 `addNotRetryableExceptions`로 등록하여 즉시 DLQ 전송. 네트워크 타임아웃 등 일시적 장애만 재시도 대상으로 분류.
 
 ● **DLQ 토픽:** `stock-decrease.DLT`, `stock-result.DLT`
 
