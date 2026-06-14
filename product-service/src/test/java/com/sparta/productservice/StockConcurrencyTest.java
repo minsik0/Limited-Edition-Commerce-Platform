@@ -62,6 +62,9 @@ class StockConcurrencyTest {
                     int updated = productOptionRepository.decreaseStockAtomic(optionId, productId, 1);
                     if (updated > 0) successCount.incrementAndGet();
                     else failCount.incrementAndGet();
+                } catch (Exception e) {
+                    failCount.incrementAndGet();
+                    System.out.println("스레드 예외: " + e.getMessage());
                 } finally {
                     latch.countDown();
                 }
