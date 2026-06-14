@@ -39,7 +39,7 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: test
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: test
           # 테스트용 DB 4개를 init 스크립트로 생성 (아래 steps에서 처리)
           POSTGRES_DB: test_db
@@ -121,10 +121,10 @@ jobs:
       # -----------------------------------------------------------------------
       - name: 테스트용 DB 생성
         run: |
-          PGPASSWORD=test psql -h localhost -U test -d test_db -c "CREATE DATABASE user_db;"
-          PGPASSWORD=test psql -h localhost -U test -d test_db -c "CREATE DATABASE product_db;"
-          PGPASSWORD=test psql -h localhost -U test -d test_db -c "CREATE DATABASE order_db;"
-          PGPASSWORD=test psql -h localhost -U test -d test_db -c "CREATE DATABASE payment_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE user_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE product_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE order_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE payment_db;"
 
       # 6) 빌드 + 테스트 실행
       # -----------------------------------------------------------------------
