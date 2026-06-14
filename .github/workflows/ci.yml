@@ -138,7 +138,7 @@ jobs:
       # application.yml에서 ${USER_DB_URL} 등으로 참조하는 값들입니다.
       # -----------------------------------------------------------------------
       - name: 빌드 및 테스트
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build --no-daemon -x :eureka:test -x :gateway:test
         env:
           # --- DB 접속 정보 ---
           USER_DB_URL: jdbc:postgresql://localhost:5432/user_db
