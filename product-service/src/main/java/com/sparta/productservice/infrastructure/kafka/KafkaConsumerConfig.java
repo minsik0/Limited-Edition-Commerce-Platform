@@ -26,10 +26,10 @@ public class KafkaConsumerConfig {
 
         DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
                 (ConsumerRecord<?, ?> record, Exception ex) -> {
-                    log.error("[DLQ] 메시지 처리 실패 → DLQ 전송 | topic={}, key={}, error={}",
-                            record.topic(), record.key(), ex.getMessage());
+                    log.error("[DLQ] 메시지 처리 실패 → DLQ 전송 | topic={}, key={}",
+                            record.topic(), record.key(), ex);
                     return new org.apache.kafka.common.TopicPartition(
-                            record.topic() + ".DLT", record.partition());
+                            record.topic() + ".DLT", -1);
                 });
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
