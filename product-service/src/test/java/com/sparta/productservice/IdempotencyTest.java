@@ -53,6 +53,10 @@ class IdempotencyTest {
         stockProcessService.process(event);
         stockProcessService.process(event);
 
+        // 네이티브 쿼리 결과를 DB에서 다시 읽기 위해 캐시 초기화
+        em.flush();
+        em.clear();
+
         // then: 재고 9개 (1번만 차감)
         ProductOption savedOption = productOptionRepository.findById(option.getOptionId()).get();
         assertThat(savedOption.getRemainStock()).isEqualTo(9);
