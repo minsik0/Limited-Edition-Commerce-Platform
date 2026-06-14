@@ -26,6 +26,8 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 ● **개발 기간:** 2026.01 ~ 진행 중
 ● **개발 인원:** 1인 (Backend)
 
+[![CI](https://github.com/minsik0/Limited-Edition-Commerce-Platform/actions/workflows/ci.yml/badge.svg)](https://github.com/minsik0/Limited-Edition-Commerce-Platform/actions/workflows/ci.yml)
+
 ---
 
 ## 2. 기술 스택

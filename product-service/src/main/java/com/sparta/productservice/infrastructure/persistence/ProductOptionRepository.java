@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+@Transactional
 public interface ProductOptionRepository extends JpaRepository<ProductOption, UUID> {
     List<ProductOption> findByProductProductIdAndDeletedAtIsNull(UUID productId);
 
@@ -54,6 +55,5 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, UU
             @Param("productId") UUID productId,
             @Param("quantity") int quantity
     );
-
 
 }

@@ -1,0 +1,178 @@
+# =============================================================================
+# GitHub Actions CI 워크플로우
+# =============================================================================
+# 역할: push 또는 PR이 올라올 때마다 자동으로 빌드 + 테스트를 실행합니다.
+# 실패하면 GitHub에서 ❌ 표시가 뜨고, 성공하면 ✅ 표시가 뜹니다.
+# README에 배지를 달면 현재 빌드 상태를 한눈에 볼 수 있습니다.
+# =============================================================================
+
+name: CI
+
+# ---------------------------------------------------------------------------
+# 트리거 조건: 언제 이 워크플로우가 실행되는가?
+# ---------------------------------------------------------------------------
+# push: dev 또는 main 브랜치에 커밋이 push되면 실행
+# pull_request: dev 또는 main 브랜치를 대상으로 PR이 열리면 실행
+# ---------------------------------------------------------------------------
+on:
+  push:
+    branches: [ dev, main ]
+  pull_request:
+    branches: [ dev, main ]
+
+jobs:
+  build:
+    # -----------------------------------------------------------------------
+    # 실행 환경: GitHub에서 제공하는 Ubuntu 최신 가상머신에서 실행
+    # -----------------------------------------------------------------------
+    runs-on: ubuntu-latest
+
+    # -----------------------------------------------------------------------
+    # 서비스 컨테이너: 테스트에 필요한 외부 인프라를 Docker로 띄움
+    # -----------------------------------------------------------------------
+    # CI 환경에는 PostgreSQL, Redis가 없으므로 여기서 컨테이너로 실행합니다.
+    # 각 서비스의 @SpringBootTest가 이 컨테이너에 접속하여 테스트합니다.
+    # -----------------------------------------------------------------------
+    services:
+
+      # PostgreSQL — 각 서비스의 DB로 사용
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test
+          # 테스트용 DB 4개를 init 스크립트로 생성 (아래 steps에서 처리)
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        # health check: PostgreSQL이 완전히 준비될 때까지 기다림
+        # 이게 없으면 DB 연결 전에 테스트가 시작되어 실패할 수 있음
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      # Redis — product-service 캐싱, gateway Rate Limiter에 사용
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # -----------------------------------------------------------------------
+    # 실행 단계 (Steps)
+    # -----------------------------------------------------------------------
+    steps:
+
+      # 1) 소스 코드 체크아웃
+      # -----------------------------------------------------------------------
+      # GitHub 저장소의 코드를 CI 가상머신으로 가져옵니다.
+      # 이게 없으면 빌드할 코드 자체가 없음.
+      # -----------------------------------------------------------------------
+      - name: 소스 코드 체크아웃
+        uses: actions/checkout@v4
+
+      # 2) JDK 21 설치
+      # -----------------------------------------------------------------------
+      # 프로젝트가 Java 21 (toolchain)을 사용하므로 동일 버전 설치.
+      # temurin: Eclipse에서 관리하는 무료 OpenJDK 배포판.
+      # -----------------------------------------------------------------------
+      - name: JDK 21 설치
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # 3) Gradle 캐시 설정
+      # -----------------------------------------------------------------------
+      # Gradle이 다운받는 의존성(~/.gradle/caches)을 CI 실행 간에 캐시합니다.
+      # 첫 실행 후부터는 의존성 다운로드를 건너뛰어 빌드 시간이 크게 줄어듭니다.
+      # 예: 캐시 없으면 3~5분 → 캐시 있으면 1~2분
+      # -----------------------------------------------------------------------
+      - name: Gradle 의존성 캐시
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          # build.gradle 파일이 바뀌면 캐시를 새로 만듦 (의존성이 변했으므로)
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          # 정확히 일치하는 캐시가 없으면 가장 최근 캐시라도 사용
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 4) gradlew 실행 권한 부여
+      # -----------------------------------------------------------------------
+      # Git에서 체크아웃하면 실행 권한이 사라질 수 있어서 명시적으로 부여합니다.
+      # 이게 없으면 "Permission denied" 에러 발생.
+      # -----------------------------------------------------------------------
+      - name: gradlew 실행 권한 부여
+        run: chmod +x gradlew
+
+      # 5) 테스트용 DB 생성
+      # -----------------------------------------------------------------------
+      # 서비스 컨테이너에서 POSTGRES_DB로 하나만 생성되므로,
+      # 각 서비스가 사용하는 DB를 추가로 만들어줍니다.
+      # -----------------------------------------------------------------------
+      - name: 테스트용 DB 생성
+        run: |
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE user_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE product_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE order_db;"
+          PGPASSWORD=test psql -h localhost -U postgres -d test_db -c "CREATE DATABASE payment_db;"
+
+      # 6) 빌드 + 테스트 실행
+      # -----------------------------------------------------------------------
+      # ./gradlew build 는 컴파일 → 테스트 → JAR 패키징을 한 번에 수행합니다.
+      # 멀티모듈이라 6개 서비스가 순서대로 빌드됩니다.
+      #
+      # --no-daemon: CI에서는 Gradle 데몬을 유지할 필요 없으므로 메모리 절약
+      # -x test 대신 build를 쓰는 이유: 테스트까지 돌려야 CI의 의미가 있음
+      #
+      # env로 각 서비스의 DB URL, Redis, JWT 시크릿을 주입합니다.
+      # application.yml에서 ${USER_DB_URL} 등으로 참조하는 값들입니다.
+      # -----------------------------------------------------------------------
+      - name: 빌드 및 테스트
+        run: ./gradlew build --no-daemon -x :eureka:test -x :gateway:test
+        env:
+          # --- DB 접속 정보 ---
+          USER_DB_URL: jdbc:postgresql://localhost:5432/user_db
+          PRODUCT_DB_URL: jdbc:postgresql://localhost:5432/product_db
+          ORDER_DB_URL: jdbc:postgresql://localhost:5432/order_db
+          PAYMENT_DB_URL: jdbc:postgresql://localhost:5432/payment_db
+          POSTGRES_PASSWORD: test
+
+          # --- Redis ---
+          SPRING_DATA_REDIS_HOST: localhost
+          SPRING_DATA_REDIS_PORT: 6379
+
+          # --- JWT (테스트용 시크릿, 32자 이상) ---
+          JWT_SECRET_KEY: ci-test-jwt-secret-key-for-github-actions-must-be-long-enough
+
+          # --- Eureka 비활성화 ---
+          # CI에서 Eureka 서버가 없으므로 클라이언트 등록을 끕니다.
+          EUREKA_CLIENT_ENABLED: false
+
+          SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+          SPRING_KAFKA_LISTENER_AUTO_STARTUP: false
+
+
+      # 7) 테스트 결과 리포트 업로드 (선택사항이지만 추천)
+      # -----------------------------------------------------------------------
+      # 테스트가 실패했을 때 GitHub Actions UI에서 어떤 테스트가 왜 실패했는지
+      # HTML 리포트를 다운받아 확인할 수 있습니다.
+      # always()를 쓰는 이유: 테스트 실패 시에도 리포트를 업로드해야 하므로.
+      # -----------------------------------------------------------------------
+      - name: 테스트 리포트 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          # 각 서비스의 테스트 결과 HTML이 이 경로에 생성됨
+          path: '**/build/reports/tests/'
+          retention-days: 7   # 7일간 보관 후 자동 삭제
