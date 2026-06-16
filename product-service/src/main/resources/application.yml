@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: product-service
+  datasource:
+    url: ${PRODUCT_DB_URL}
+    username: postgres
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 30
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+          order_inserts: true
+          order_updates: true
+    show-sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    clean-disabled: false
+    clean-on-validation-error: false
+    locations: classpath:db/migration
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3s
+
+  cache:
+    type: redis
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: stock-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.sparta.*
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 19020
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  metrics:
+    tags:
+      application: product-service
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-ms: 360000000
+  issuer: limited-edition-commerce-platform
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace

@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.9'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.sparta'
@@ -10,7 +10,7 @@ description = 'product-service'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -22,9 +22,45 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	implementation 'org.flywaydb:flyway-core'
+
+	//더미데이터 생성
+	implementation 'net.datafaker:datafaker:2.1.0'
+
+	//jit-pack
+	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.4'
+
+	//env
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// DB
+	runtimeOnly 'org.postgresql:postgresql'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -32,6 +68,12 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
+	}
 }
 
 tasks.named('test') {

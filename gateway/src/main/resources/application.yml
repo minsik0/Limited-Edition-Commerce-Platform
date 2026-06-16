@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/products/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  metrics:
+    tags:
+      application: gateway
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-ms: 360000000
+  issuer: limited-edition-commerce-platform
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.netty: DEBUG

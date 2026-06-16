@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: ${USER_DB_URL}
+    username: postgres
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 19010
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  metrics:
+    tags:
+      application: user-service
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-ms: 360000000
+  issuer: limited-edition-commerce-platform

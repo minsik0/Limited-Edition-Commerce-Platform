@@ -1,0 +1,27 @@
+# 빌드 결과물 (Docker 안에서 새로 빌드하므로 불필요)
+**/build/
+**/.gradle/
+
+# IDE 설정
+.idea/
+*.iml
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Docker 관련 (재귀 방지)
+**/Dockerfile
+**/.dockerignore
+docker-compose*.yml
+
+# 문서/이미지
+*.md
+images/
+docs/
+monitoring/
+
+# 테스트 리포트
+**/test-results/
+**/test-reports/

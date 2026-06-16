@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: ${PAYMENT_DB_URL}
+    username: postgres
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    clean-disabled: false
+    clean-on-validation-error: false
+    locations: classpath:db/migration
+
+server:
+  port: 19040
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  metrics:
+    tags:
+      application: payment-service
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-ms: 360000000
+  issuer: limited-edition-commerce-platform
+
+order:
+  service:
+    url: ${ORDER_SERVICE_URL:http://order-service:8080}
