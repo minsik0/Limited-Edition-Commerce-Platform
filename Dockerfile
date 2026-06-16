@@ -34,25 +34,34 @@ RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
 
 # 전체 소스 복사 후 빌드
 COPY . .
-RUN ./gradlew clean build -x test --no-daemon
+ARG SERVICE_NAME
+RUN ./gradlew :${SERVICE_NAME}:build -x test --no-daemon
 
 # ---------------------------------------------------------------------------
 # Stage 2: 실행 (JRE만 포함된 경량 이미지)
 # ---------------------------------------------------------------------------
 FROM eclipse-temurin:21-jre
 
+# curl 설치 및 non-root 사용자 생성
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    useradd --system --user-group app
+
 WORKDIR /app
 
-# ARG로 서비스명을 받아 해당 서비스의 JAR만 복사
-# docker build 시 --build-arg SERVICE_NAME=user-service 로 지정
+# ARG로 서비스명과 버전을 받아 해당 서비스의 JAR만 복사
 ARG SERVICE_NAME
+ARG VERSION=0.0.1-SNAPSHOT
 
-# builder 스테이지에서 빌드된 JAR 복사
-COPY --from=builder /app/${SERVICE_NAME}/build/libs/${SERVICE_NAME}-0.0.1-SNAPSHOT.jar app.jar
+# builder 스테이지에서 빌드된 JAR 복사 (소유권 변경)
+COPY --from=builder --chown=app:app /app/${SERVICE_NAME}/build/libs/${SERVICE_NAME}-${VERSION}.jar app.jar
+
+USER app
 
 # Spring Boot Actuator 헬스체크
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+  CMD curl -f http://localhost:${SERVER_PORT:-8080}/actuator/health || exit 1
 
 # JAR 실행
 # -XX:+UseContainerSupport: 컨테이너 메모리 제한을 JVM이 인식하도록 설정
