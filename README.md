@@ -1,4 +1,4 @@
-![CI](https://github.com/minsik0/Limited-Edition-Commerce-Platform/actions/workflows/ci.yml/badge.svg)
+![CI/CD](https://github.com/minsik0/Limited-Edition-Commerce-Platform/actions/workflows/ci-cd.yml/badge.svg)
 
 # 🚀 Limited-Edition-Commerce-Platform
 > **한정판 상품 선착순 구매를 위한 이벤트 기반 MSA 백엔드 프로젝트**
