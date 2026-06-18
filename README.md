@@ -306,7 +306,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 ● JWT Bearer 인증 지원 — Swagger UI의 "Authorize" 버튼에서 토큰 입력 후 인증 필요 API 테스트 가능.
 
 ● Internal API(서비스 간 통신용)는 Swagger에 노출하지 않음.
-
+![Swagger UI](./images/swagger-product.png)
 ---
 
 ## 11. 로컬 인프라 및 실행 방법
