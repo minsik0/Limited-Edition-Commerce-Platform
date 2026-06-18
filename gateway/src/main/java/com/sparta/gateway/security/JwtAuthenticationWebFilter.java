@@ -37,6 +37,14 @@ public class JwtAuthenticationWebFilter implements WebFilter {
             return chain.filter(exchange);
         }
 
+        if (path.startsWith("/actuator")) {
+            return chain.filter(exchange);
+        }
+
+        if (path.startsWith("/users/signup") || path.startsWith("/users/login")) {
+            return chain.filter(exchange);
+        }
+
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {

@@ -278,8 +278,7 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 
 ● Grafana 대시보드에서 주요 지표를 실시간 시각화.
 
-<!-- JMeter 부하 테스트 중 Grafana 대시보드 캡처를 아래에 추가하세요 -->
-<!-- ![Grafana Dashboard](docs/images/grafana-dashboard.png) -->
+![Grafana Dashboard](./images/grafana-dashboard(HTTP).png)
 
 | 패널 | 모니터링 대상 | 의미 |
 | :--- | :--- | :--- |

@@ -40,6 +40,7 @@ public class RedisConfig {
 
         PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
                 .allowIfBaseType("com.sparta.")
+                .allowIfSubType("com.sparta.")
                 .allowIfSubType(List.class)
                 .allowIfSubType(ArrayList.class)
                 .build();
