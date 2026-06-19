@@ -37,11 +37,11 @@ public class JwtAuthenticationWebFilter implements WebFilter {
             return chain.filter(exchange);
         }
 
-        if (path.startsWith("/actuator")) {
+        if (path.equals("/actuator") || path.startsWith("/actuator/")) {
             return chain.filter(exchange);
         }
-
-        if (path.startsWith("/users/signup") || path.startsWith("/users/login")) {
+        if (path.equals("/users/signup") || path.startsWith("/users/signup/") ||
+                path.equals("/users/login") || path.startsWith("/users/login/")) {
             return chain.filter(exchange);
         }
 
