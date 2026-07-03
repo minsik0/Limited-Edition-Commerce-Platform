@@ -1,6 +1,7 @@
 package com.sparta.orderservice.application.service;
 
 import com.sparta.multi_module.common.Event.StockDecreaseEvent;
+import com.sparta.multi_module.common.Event.StockIncreaseEvent;
 import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.orderservice.application.dto.request.CreateOrderRequest;
@@ -79,7 +80,18 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
+        OrderItem item = order.getItems().get(0);
+
         order.cancel();
+
+        StockIncreaseEvent event = StockIncreaseEvent.of(
+                order.getOrderId(),
+                item.getProductId(),
+                item.getOptionId(),
+                item.getQuantity()
+        );
+
+        eventPublisher.publishEvent(event);
     }
 
     @Override

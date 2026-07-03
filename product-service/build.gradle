@@ -45,7 +45,7 @@ dependencies {
 	implementation 'net.datafaker:datafaker:2.1.0'
 
 	//jit-pack
-	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.4'
+	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.5'
 
 	//env
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
