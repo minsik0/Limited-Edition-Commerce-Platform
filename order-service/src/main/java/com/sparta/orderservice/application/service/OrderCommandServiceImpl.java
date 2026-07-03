@@ -80,18 +80,18 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
-        OrderItem item = order.getItems().get(0);
-
         order.cancel();
 
-        StockIncreaseEvent event = StockIncreaseEvent.of(
-                order.getOrderId(),
-                item.getProductId(),
-                item.getOptionId(),
-                item.getQuantity()
-        );
-
-        eventPublisher.publishEvent(event);
+        if (order.getItems() != null) {
+            order.getItems().stream()
+                    .map(item -> StockIncreaseEvent.of(
+                            order.getOrderId(),
+                            item.getProductId(),
+                            item.getOptionId(),
+                            item.getQuantity()
+                    ))
+                    .forEach(eventPublisher::publishEvent);
+        }
     }
 
     @Override
