@@ -17,7 +17,7 @@
 - [9. 모니터링](#9-모니터링)
 - [10. API 문서](#10-api-문서)
 - [11. 로컬 인프라 및 실행 방법](#11-로컬-인프라-및-실행-방법)
-
+- [12. CI/CD 파이프라인](#12-CI/CD-파이프라인)
 ---
 
 ## 1. 프로젝트 소개
@@ -320,6 +320,52 @@ Limited-Edition-Commerce-Platform은 특정 시간에 오픈되는 **한정판 �
 
 ● **Strategy:** `docker-compose.yml`을 통해 원클릭으로 개발 환경 구축 가능.
 
+---
+
+## 12. CI/CD 파이프라인
+
+> **GitHub Actions 기반 자동화된 빌드 → 테스트 → 이미지 배포 파이프라인**
+
+### 파이프라인 흐름
+
+● **dev push / PR** → CI만 실행 (빌드 + 테스트)
+
+● **main push** → CI 성공 → CD 실행 (Docker 이미지 빌드 + GHCR 푸시)
+
+● CI가 실패하면 CD는 실행되지 않아, 검증되지 않은 이미지가 배포되는 것을 방지.
+
+### CI (Continuous Integration)
+
+● GitHub Actions에서 push/PR 시 자동으로 `./gradlew build` 실행.
+
+● PostgreSQL, Redis를 서비스 컨테이너로 구동하여 동시성/멱등성/Saga 통합 테스트 실행.
+
+● 테스트 실패 시 HTML 리포트를 아티팩트로 업로드하여 원인 분석 지원.
+
+### CD (Continuous Delivery)
+
+● **멀티스테이지 Dockerfile:** JDK로 빌드 → JRE만 포함된 경량 이미지로 패키징 (약 50% 크기 절감).
+
+● **단일 Dockerfile로 6개 서비스 빌드:** `ARG SERVICE_NAME`으로 서비스를 구분하여 하나의 Dockerfile로 모든 서비스를 이미지화.
+
+● **Matrix 전략으로 병렬 빌드:** 6개 서비스를 동시에 빌드하여 전체 CD 시간 단축.
+
+● **GHCR(GitHub Container Registry)에 이미지 푸시:** `latest` + `sha-{커밋해시}` 이중 태그로 최신 추적 및 커밋별 롤백 가능.
+
+● **비루트(non-root) 사용자 실행:** 컨테이너 보안을 위해 `app` 사용자로 애플리케이션 실행.
+
+### 이미지 태그 전략
+
+| 태그 | 용도 |
+| :--- | :--- |
+| `latest` | 항상 최신 빌드를 가리킴 |
+| `sha-{커밋해시}` | 특정 커밋으로 빌드된 이미지 추적 및 롤백 |
+
+### 실배포를 하지 않은 이유
+
+MSA 6개 서비스 + Kafka + Redis + PostgreSQL을 클라우드에 상시 운영하면 월 5~10만원 이상의 비용이 발생합니다. 포트폴리오 목적상 이미지 빌드/푸시 파이프라인까지 구성하고, 로컬에서는 docker-compose로 전체 서비스를 띄워 통합 검증을 수행했습니다.
+
+---
 ### 🛠 실행 방법
 ```bash
 # 1. 컨테이너 인프라 실행 (PostgreSQL, Redis, Kafka, Prometheus, Grafana)
