@@ -25,4 +25,6 @@ public interface ProductOptionService {
     void deductStock(UUID productId, UUID optionId, int quantity);
 
     boolean decreaseStockAtomic(UUID productId, UUID optionId, int quantity);
+
+    boolean increaseStockAtomic(UUID productId, UUID optionId, int quantity);
 }

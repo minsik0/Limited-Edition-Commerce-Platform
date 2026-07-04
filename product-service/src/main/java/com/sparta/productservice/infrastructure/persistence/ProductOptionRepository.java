@@ -56,4 +56,18 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, UU
             @Param("quantity") int quantity
     );
 
+    @Modifying
+    @Query("""
+    UPDATE ProductOption o
+    SET o.remainStock = o.remainStock + :quantity
+    WHERE o.optionId = :optionId
+    AND o.product.productId = :productId
+    AND o.deletedAt IS NULL
+""")
+    int increaseStockAtomic(
+            @Param("optionId") UUID optionId,
+            @Param("productId") UUID productId,
+            @Param("quantity") int quantity
+    );
+
 }
