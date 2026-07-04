@@ -29,7 +29,7 @@ public class JwtAuthenticationWebFilter implements WebFilter {
                     .getHeaders()
                     .getFirst("X-Internal-Call");
 
-            if (internalSecret == null || !internalSecret.equals(internalCallHeader)) {
+            if (internalSecret == null || internalSecret.isBlank() || !internalSecret.equals(internalCallHeader)) {
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }
