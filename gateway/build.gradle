@@ -28,7 +28,7 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.4'
+	implementation 'com.github.minsik0:Limited-Edition-Commerce-Platform-common:v0.1.5'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

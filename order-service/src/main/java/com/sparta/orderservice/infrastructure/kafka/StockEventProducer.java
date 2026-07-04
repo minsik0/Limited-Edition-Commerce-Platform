@@ -12,8 +12,13 @@ public class StockEventProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     private static final String TOPIC = "stock-decrease";
+    private static final String INCREASE_TOPIC = "stock-increase";
 
     public void send(StockDecreaseEvent event) {
         kafkaTemplate.send(TOPIC, event.getOrderId().toString(), event);
+    }
+
+    public void send(StockIncreaseEvent event) {
+        kafkaTemplate.send(INCREASE_TOPIC, event.getOrderId().toString(), event);
     }
 }

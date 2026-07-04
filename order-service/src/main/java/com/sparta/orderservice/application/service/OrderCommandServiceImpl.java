@@ -1,6 +1,7 @@
 package com.sparta.orderservice.application.service;
 
 import com.sparta.multi_module.common.Event.StockDecreaseEvent;
+import com.sparta.multi_module.common.Event.StockIncreaseEvent;
 import com.sparta.multi_module.common.exception.BusinessException;
 import com.sparta.multi_module.common.exception.ErrorCode;
 import com.sparta.orderservice.application.dto.request.CreateOrderRequest;
@@ -80,6 +81,17 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .orElseThrow(()-> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
         order.cancel();
+
+        if (order.getItems() != null) {
+            order.getItems().stream()
+                    .map(item -> StockIncreaseEvent.of(
+                            order.getOrderId(),
+                            item.getProductId(),
+                            item.getOptionId(),
+                            item.getQuantity()
+                    ))
+                    .forEach(eventPublisher::publishEvent);
+        }
     }
 
     @Override
