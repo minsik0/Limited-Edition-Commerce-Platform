@@ -92,6 +92,13 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return updated > 0;
     }
 
+    @Override
+    @Transactional
+    public boolean increaseStockAtomic(UUID productId, UUID optionId, int quantity) {
+        int updated = productOptionRepository.increaseStockAtomic(optionId, productId, quantity);
+        return updated > 0;
+    }
+
     private ProductOption findOption(UUID optionId) {
         return productOptionRepository.findById(optionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND));
