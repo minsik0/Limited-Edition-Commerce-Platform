@@ -2,6 +2,7 @@ package com.sparta.gateway.security;
 
 import com.sparta.multi_module.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -15,22 +16,21 @@ public class JwtAuthenticationWebFilter implements WebFilter {
 
     private final JwtProvider jwtProvider;
 
+    @Value("${internal.secret}")
+    private String internalSecret;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 
-        String path =  exchange.getRequest().getURI().getPath();
+        String path = exchange.getRequest().getURI().getPath();
 
         if (path.startsWith("/internal/")) {
-
             String internalCallHeader = exchange.getRequest()
-                            .getHeaders()
-                            .getFirst("X-Internal-Call");
+                    .getHeaders()
+                    .getFirst("X-Internal-Call");
 
-            if (!"true".equals(internalCallHeader)) {
-
-                exchange.getResponse()
-                        .setStatusCode(HttpStatus.FORBIDDEN);
-
+            if (!internalSecret.equals(internalCallHeader)) {
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }
 
@@ -47,7 +47,7 @@ public class JwtAuthenticationWebFilter implements WebFilter {
 
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
@@ -56,12 +56,9 @@ public class JwtAuthenticationWebFilter implements WebFilter {
 
         try {
             jwtProvider.getUserId(token);
-
             return chain.filter(exchange);
         } catch (Exception e) {
-
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-
             return exchange.getResponse().setComplete();
         }
     }
