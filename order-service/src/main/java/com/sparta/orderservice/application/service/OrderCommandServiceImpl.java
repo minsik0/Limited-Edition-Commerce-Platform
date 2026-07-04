@@ -41,7 +41,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 userId, request.getProductId()
         );
         if (alreadyOrdered + request.getQuantity() > product.getMaxPurchasePerUser()) {
-            throw new BusinessException(ErrorCode.ORDER_NOT_FOUND);
+            throw new BusinessException(ErrorCode.PURCHASE_LIMIT_EXCEEDED);
         }
 
         //Item 생성
