@@ -13,12 +13,11 @@ public class StockIncreaseProcessService {
 
     private final ProductOptionService productOptionService;
     private final ProcessedEventRepository processedEventRepository;
-    private final ProductOptionRepository productOptionRepository;
 
     @Transactional
     public void process(StockIncreaseEvent event) {
 
-        if(processedEventRepository.existsById(event.getProductId())) {
+        if(processedEventRepository.existsById(event.getEventId())) {
             return;
         }
 
