@@ -52,6 +52,9 @@ jwt:
   access-token-expiration-ms: 360000000
   issuer: limited-edition-commerce-platform
 
+internal:
+  secret: ${INTERNAL_SECRET:internal-secret}
+
 logging:
   level:
     org.springframework.cloud.gateway: TRACE

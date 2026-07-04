@@ -36,6 +36,9 @@ jwt:
   access-token-expiration-ms: 360000000
   issuer: limited-edition-commerce-platform
 
+internal:
+  secret: ${INTERNAL_SECRET:internal-secret}
+
 order:
   service:
     url: ${ORDER_SERVICE_URL:http://order-service:8080}
