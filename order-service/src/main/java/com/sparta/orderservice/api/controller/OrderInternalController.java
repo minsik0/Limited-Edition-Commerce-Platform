@@ -23,21 +23,23 @@ public class OrderInternalController {
 
     // 헤더 검증 공통 메서드
     private void validateInternalCall(String internalCall) {
-        if (!internalSecret.equals(internalCall)) {
+        if (internalSecret == null || internalSecret.isBlank() || !internalSecret.equals(internalCall)) {
             throw new BusinessException(ErrorCode.INVALID_REQUEST);
         }
     }
 
     @PostMapping("/{orderId}/mark-paid")
     public void markOrderAsPaid(@PathVariable UUID orderId,
-                                @RequestHeader("X-Internal-Call") String internalCall) { // 헤더 추가
+                                @RequestHeader(value = "X-Internal-Call", required = false)
+                                String internalCall) {
         validateInternalCall(internalCall);
         orderCommandService.markOrderAsPaid(orderId);
     }
 
     @GetMapping("/{orderId}/amount")
     public Long getOrderAmount(@PathVariable UUID orderId,
-                               @RequestHeader("X-Internal-Call") String internalCall) {
+                               @RequestHeader(value = "X-Internal-Call", required = false)
+                               String internalCall) {
         validateInternalCall(internalCall);
         return orderQueryService.getOrderAmount(orderId);
     }
