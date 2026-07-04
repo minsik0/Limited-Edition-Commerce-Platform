@@ -57,15 +57,6 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @CacheEvict(value = "products", allEntries = true)
     public ProductStatusResponse open(UUID productId) {
         Product product = findProduct(productId);
-
-        if(product.isBeforeOpenAt()) {
-            throw new BusinessException(ErrorCode.PRODUCT_NOT_OPEN_TIME);
-        }
-
-        if(!product.getStatus().canOpen()) {
-            throw new BusinessException(ErrorCode.INVALID_PRODUCT_STATE);
-        }
-
         product.open();
         return new ProductStatusResponse(productId, product.getStatus());
     }

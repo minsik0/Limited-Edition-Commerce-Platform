@@ -75,6 +75,10 @@ public class Product {
     }
 
     public void close() {
+        // OPEN 상태에서만 종료 가능
+        if (!this.status.canClose()) {
+            throw new IllegalStateException("OPEN 상태의 상품만 종료할 수 있습니다. 현재 상태: " + this.status.getDescription());
+        }
         this.status = ProductStatus.CLOSED;
         this.deletedAt = LocalDateTime.now();
         this.options.forEach(ProductOption::delete);
