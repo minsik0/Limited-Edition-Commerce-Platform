@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class PaymentController {
     })
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(
-            @RequestBody PaymentCreateRequest request,
+            @RequestBody @Valid PaymentCreateRequest request,
             @Parameter(hidden = true) @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
         UUID userId = principal.getUserId();
         Payment payment = paymentService.createPayment(
