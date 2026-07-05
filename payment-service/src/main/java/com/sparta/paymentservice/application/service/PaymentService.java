@@ -14,7 +14,7 @@ public interface PaymentService {
 
     List<Payment> getPayments(UUID userId, PaymentStatus status);
 
-    void cancelPayment(UUID userId, UUID paymentId);
+    void cancelPayment(UUID paymentId, UUID userId);
 
     void deletePayment(UUID paymentId, UUID userId);
 

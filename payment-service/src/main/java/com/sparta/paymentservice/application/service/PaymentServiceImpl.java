@@ -76,7 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void cancelPayment(UUID userId, UUID paymentId) {
+    public void cancelPayment(UUID paymentId, UUID userId) {
         Payment payment = getPayment(paymentId, userId);
         payment.cancel();
     }
