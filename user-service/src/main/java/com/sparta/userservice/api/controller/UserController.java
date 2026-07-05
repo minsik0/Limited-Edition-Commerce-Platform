@@ -37,8 +37,8 @@ public class UserController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "유효성 검증 실패"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이메일 중복")
     })
-    @PostMapping("signup")
-    public ResponseEntity<ApiResponse<UserSignupResponse>> signup(@RequestBody  @Valid UserSignupRequest request) {
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<UserSignupResponse>> signup(@RequestBody @Valid UserSignupRequest request) {
         UserSignupResponse response = userService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
@@ -46,27 +46,27 @@ public class UserController {
     @Operation(summary = "로그인", description = "이메일/비밀번호로 로그인 후 JWT 토큰 발급")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "로그인 성공, JWT 반환"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "비밀번호 불일치"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "존재하지 않는 사용자")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "이메일 또는 비밀번호 불일치")
     })
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UserLoginResponse>> login(@RequestBody @Valid UserLoginRequest request) {
         UserLoginResponse response = userService.login(request);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(summary = "전체 사용자 목록 조회", description = "ADMIN 권한 필요. 페이지네이션 지원")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<Page<UserListResponse>> getUsers(@ParameterObject @PageableDefault(size = 30) Pageable pageable) {
-        return ResponseEntity.ok(userService.getUsers(pageable));
+    public ResponseEntity<ApiResponse<Page<UserListResponse>>> getUsers(
+            @ParameterObject @PageableDefault(size = 30) Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getUsers(pageable)));
     }
 
     @Operation(summary = "내 정보 조회", description = "JWT 토큰 기반 본인 정보 조회")
     @GetMapping("/me")
-    public ResponseEntity<UserInfoResponse> getMyInfo(
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getMyInfo(
             @Parameter(hidden = true) @AuthenticationPrincipal DefaultAuthenticatedUser principal) {
-        return ResponseEntity.ok(userService.getMyInfo(principal.getUserId()));
+        return ResponseEntity.ok(ApiResponse.success(userService.getMyInfo(principal.getUserId())));
     }
 
     @Operation(summary = "내 정보 수정", description = "이름, 비밀번호 변경")
