@@ -11,7 +11,6 @@ import com.sparta.productservice.domain.product.Product;
 import com.sparta.productservice.infrastructure.persistence.ProductOptionRepository;
 import com.sparta.productservice.infrastructure.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
